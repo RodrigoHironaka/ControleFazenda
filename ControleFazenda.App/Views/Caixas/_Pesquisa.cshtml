@@ -1,0 +1,52 @@
+﻿@model IEnumerable<ControleFazenda.App.ViewModels.CaixaVM>
+
+<div class="modal fade" id="modalPesquisaCaixas" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Selecionar Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="javascript:window.location.reload()"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table tabela">
+                    <thead>
+                        <tr>
+                            <th>
+                                Caixa Nº
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Situacao)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Numero)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Situacao)
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-success modal-trigger" data-id="@item.Id" onclick="confirmar(this)"><i class="bi bi-check"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmar(button) {
+        var id = $(button).attr('data-id');
+        $('#modalPesquisaCaixas').modal('hide');
+        window.location.href = 'lista-de-caixas?Id=' + id;
+    }
+</script>

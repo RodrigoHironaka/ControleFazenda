@@ -1,0 +1,82 @@
+﻿@using ControleFazenda.Business.Entidades.Enum
+@model ControleFazenda.App.ViewModels.FluxoCaixaVM
+
+@{
+    ViewData["Title"] = "Editar";
+}
+
+<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="javascript:window.location.reload()"></button>
+        </div>
+        <div class="modal-body">
+            <form asp-action="Editar" id="frm">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CaixaId" />
+                <input type="hidden" asp-for="UsuarioCadastroId" />
+                <input type="hidden" asp-for="UsuarioAlteracaoId" />
+                <div class="form-group">
+                    <label asp-for="Descricao" class="control-label"></label>
+                    <input asp-for="Descricao" class="form-control" />
+                    <span asp-validation-for="Descricao" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Valor" class="control-label"></label>
+                    <input asp-for="Valor" class="form-control" />
+                    <span asp-validation-for="Valor" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Data" class="control-label"></label>
+                    <input asp-for="Data" class="form-control" type="date" />
+                    <span asp-validation-for="Data" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FormaPagamentoId" class="control-label"></label>
+                    <select asp-for="FormaPagamentoId" class="form-select" asp-items="@(new SelectList(Model.FormasPagamento, "Id", "Nome", Model.FormaPagamentoId))"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DebitoCredito" class="control-label"></label>
+                    <select class="form-select" asp-for="DebitoCredito" asp-items="Html.GetEnumSelectList<DebitoCredito>()"></select>
+                    <span asp-validation-for="DebitoCredito" class="text-danger"></span>
+                </div>
+
+
+                @if (Model.UsuarioCadastroId != Guid.Empty)
+                {
+                    <div class="form-group">
+                        <br />
+                        <input asp-for="_InfoCadastro" class="form-control" readonly style="font-size:10px;"></input>
+                    </div>
+                }
+                @if (Model.UsuarioAlteracaoId != Guid.Empty)
+                {
+                    <div class="form-group">
+                        <input asp-for="_InfoAlteracao" class="form-control" readonly style="font-size:10px;"></input>
+                    </div>
+                }
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" onclick="javascript:window.location.reload()">Fechar</button>
+                    <button type="button" onclick="chamarSalvar()" class="btn btn-success">Salvar Registro</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function chamarSalvar() {
+            var id = $("#Id").val();
+            var url = 'editar-fluxo-caixa/' + id;
+            SalvarQuandoModal('frm', url)
+        }
+    </script>
+}

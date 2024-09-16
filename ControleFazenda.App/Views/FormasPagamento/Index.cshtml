@@ -1,0 +1,64 @@
+﻿@model IEnumerable<ControleFazenda.App.ViewModels.FormaPagamentoVM>
+
+@{
+    ViewData["Title"] = "Lista de Formas de Pagamento";
+}
+
+<h1>@ViewData["Title"]?.ToString()?.ToUpper()</h1>
+
+<p>
+    <button class=" w-100 btn btn-success novo" data-id="@Guid.Empty"><i class="bi bi-plus-lg"></i> Novo</button>
+</p>
+<table class="table table-bordered table-striped table-hover small tabela">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Situacao)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Situacao)
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-primary modal-trigger editar" data-id="@item.Id"><i class="bi bi-pencil-square"></i></button>
+                    <button class="btn btn-sm btn-danger modal-trigger excluir" data-id="@item.Id"><i class="bi bi-trash-fill"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div id="modal" class="modal fade" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false"></div>
+
+@section Scripts
+{
+    <script>
+        function chamarExcluir(id) {
+            var url = 'excluir-formapagamento/' + id;
+            Excluir(id, url)
+        }
+
+        $(document).ready(function () {
+            abrirModal(".novo", "NOVO REGISTRO", "/editar-formapagamento/");
+            abrirModal(".editar", "EDITAR REGISTRO", "/editar-formapagamento/");
+
+            $('.excluir').click(function () {
+                var itemId = $(this).data('id');
+                chamarExcluir(itemId);
+            });
+
+
+        });
+    </script>
+}

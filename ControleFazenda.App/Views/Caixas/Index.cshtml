@@ -1,0 +1,211 @@
+﻿@using ControleFazenda.Business.Entidades.Enum
+@model ControleFazenda.App.ViewModels.CaixaVM;
+
+@{
+    ViewData["Title"] = "Caixa";
+}
+
+<div class="row mb-3">
+    <div class="col-sm-5 ">
+        <button type="button" class="btn btn-secondary" onclick="PesquisaCaixas()"><i class="bi bi-search"></i> Pesquisar</button>
+        @if (Model.Situacao == SituacaoCaixa.Aberto)
+        {
+            @if (Model.Id == Guid.Empty)
+            {
+                <button type="button" class="btn btn-primary" onclick="AbrirCaixa()"><i class="bi bi-cash-stack"></i> Abrir Caixa</button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-primary" onclick="FecharCaixa()"><i class="bi bi-cash-stack"></i> Fechar Caixa</button>
+            }
+        }
+        @if (Model.Id != Guid.Empty && Model.Situacao == SituacaoCaixa.Aberto)
+        {
+            <button type="button" class="btn btn-success novo" data-id="@Guid.Empty"><i class="bi bi-plus-lg"></i> Adicionar</button>
+        }
+    </div>
+    <div class="col-md-4">
+        @if (Model.Id != Guid.Empty)
+        {
+            <h2>Caixa Nº: @Model.Numero</h2>
+        }
+    </div>
+    <div class="col-md-3">
+        @if (Model.Id != Guid.Empty)
+        {
+            <h2 class="text-end">Total Nº: @Model.TotalFluxo</h2>
+        }
+    </div>
+</div>
+<hr />
+
+<table class="table table-bordered table-striped table-hover small tabela">
+    <thead>
+        <tr>
+            <th>Tipo</th>
+            <th>Data</th>
+            <th style="text-align:right">Valor</th>
+            <th>Forma de Pagamento</th>
+            <th>Descrição</th>
+            <th>Opções</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.FluxosCaixa != null)
+        {
+            @foreach (var item in Model.FluxosCaixa)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DebitoCredito)
+                    </td>
+                    <td>
+                        @Html.Raw(item.Data.Value.ToShortDateString())
+                    </td>
+                    <td style="text-align:right">
+                        @if (item.DebitoCredito == DebitoCredito.Credito)
+                        {
+                            @Html.DisplayFor(modelItem => item.Valor)
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => item.Valor)
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FormaPagamento.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descricao)
+                    </td>
+                    <td>
+                        @if (Model.Id != Guid.Empty && Model.Situacao == SituacaoCaixa.Aberto)
+                        {
+                            <button class="btn btn-sm btn-primary modal-trigger editar" data-id="@item.Id"><i class="bi bi-pencil-square"></i></button>
+                            <button class="btn btn-sm btn-danger modal-trigger excluir" data-id="@item.Id"><i class="bi bi-trash-fill"></i></button>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div id="modalPesquisa"></div>
+<div id="modal" class="modal fade" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false"></div>
+
+@section Scripts
+{
+    <script>
+
+        function PesquisaCaixas() {
+            $.ajax({
+                url: '@Url.Action("PesquisaCaixas", "Caixas")',
+                type: 'GET',
+                success: function (data) {
+                    $('#modalPesquisa').html(data);
+                    $('#modalPesquisaCaixas').modal('show');
+                },
+                error: function (xhr, status, error) {
+                    alert('Ocorreu um erro ao carregar o modal.');
+                }
+            });
+        }
+
+        function AbrirCaixa() {
+            $.ajax({
+                url: '@Url.Action("AbrirCaixa", "Caixas")',
+                type: 'POST',
+                success: function (response) {
+                    if (response.success = true) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: "Caixa aberto com sucesso.",
+                            confirmButtonText: "OK",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = '/lista-de-caixas';
+                            }
+                        });
+                    }
+                    else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: response.errors,
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: error,
+                    });
+                }
+            });
+        }
+
+        function FecharCaixa() {
+            Swal.fire({
+                title: "Deseja realmente fechar o caixa?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Sim!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("if confirmacao");
+                    $.ajax({
+                        url: '@Url.Action("FecharCaixa", "Caixas")',
+                        type: 'POST',
+                        success: function (response) {
+                            if (response.success = true) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: "Caixa fechado com sucesso.",
+                                    confirmButtonText: "OK",
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = '/lista-de-caixas';
+                                    }
+                                });
+                            }
+                            else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: response.errors,
+                                });
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: error,
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        function chamarExcluir(id) {
+            var url = 'excluir-fluxo-caixa/' + id;
+            Excluir(id, url)
+        }
+
+        $(document).ready(function () {
+            abrirModal(".novo", "NOVO REGISTRO", "/editar-fluxo-caixa/");
+            abrirModal(".editar", "EDITAR REGISTRO", "/editar-fluxo-caixa/");
+
+            $('.excluir').click(function () {
+                var itemId = $(this).data('id');
+                chamarExcluir(itemId);
+            });
+        });
+    </script>
+}
+

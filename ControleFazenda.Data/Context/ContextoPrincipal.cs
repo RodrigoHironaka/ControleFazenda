@@ -14,6 +14,10 @@ namespace ControleFazenda.Data.Context
         public DbSet<Caixa> Caixas { get; set; }
         public DbSet<FluxoCaixa> FluxosCaixa { get; set; }
         public DbSet<FormaPagamento> FormasPagamento { get; set; }
+        public DbSet<LogAlteracao> LogsAlteracao { get; set; }
+        public DbSet<Colaborador> Colaboradores { get; set; }
+        public DbSet<Fornecedor> Fornecedores { get; set; }
+        public DbSet<Recibo> Recibos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,6 +32,8 @@ namespace ControleFazenda.Data.Context
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
                 relationship.DeleteBehavior = DeleteBehavior.ClientSetNull;
 
+            modelBuilder.Entity<Colaborador>().OwnsOne(c => c.Endereco);
+            modelBuilder.Entity<Fornecedor>().OwnsOne(c => c.Endereco);
             // Ignorar a propriedade DataAlteracao e UsuarioAlteracaoId
             //modelBuilder.Entity<LogAlteracao>(entity =>
             //{

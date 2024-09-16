@@ -1,0 +1,147 @@
+﻿@using ControleFazenda.Business.Entidades.Enum
+@model ControleFazenda.App.ViewModels.FornecedorVM
+
+@{
+    ViewData["Title"] = Model.Id == Guid.Empty ? "NOVO REGISTRO" : "EDITAR REGISTRO";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Editar" id="frm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="UsuarioCadastroId" />
+            <input type="hidden" asp-for="UsuarioAlteracaoId" />
+            <div class="row">
+                <div class="col-md-4">
+                    <label asp-for="Situacao" class="control-label"></label>
+                    <select asp-for="Situacao" class="form-select" asp-items="Html.GetEnumSelectList<Situacao>()"></select>
+                    <span asp-validation-for="Situacao" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="TipoPessoa" class="control-label"></label>
+                    <select asp-for="TipoPessoa" class="form-select" asp-items="Html.GetEnumSelectList<TipoPessoa>()"></select>
+                    <span asp-validation-for="TipoPessoa" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Nascimento" class="control-label"></label>
+                    <input asp-for="Nascimento" class="form-control" type="date" />
+                    <span asp-validation-for="Nascimento" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label asp-for="RazaoSocial" class="control-label"></label>
+                    <input asp-for="RazaoSocial" class="form-control" />
+                    <span asp-validation-for="RazaoSocial" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="NomeFantasia" class="control-label"></label>
+                    <input asp-for="NomeFantasia" class="form-control" />
+                    <span asp-validation-for="NomeFantasia" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <label asp-for="Documento" class="control-label"></label>
+                    <input asp-for="Documento" class="form-control" />
+                    <span asp-validation-for="Documento" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Documento2" class="control-label"></label>
+                    <input asp-for="Documento2" class="form-control" />
+                    <span asp-validation-for="Documento2" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label asp-for="Telefone" class="control-label"></label>
+                    <input asp-for="Telefone" class="form-control" />
+                    <span asp-validation-for="Telefone" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Celular" class="control-label"></label>
+                    <input asp-for="Celular" class="form-control" />
+                    <span asp-validation-for="Celular" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Celular2" class="control-label"></label>
+                    <input asp-for="Celular2" class="form-control" />
+                    <span asp-validation-for="Celular2" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label asp-for="Endereco.Logradouro" class="control-label"></label>
+                    <input asp-for="Endereco.Logradouro" class="form-control" />
+                    <span asp-validation-for="Endereco.Logradouro" class="text-danger"></span>
+                </div>
+                <div class="col-md-2">
+                    <label asp-for="Endereco.Numero" class="control-label"></label>
+                    <input asp-for="Endereco.Numero" class="form-control" />
+                    <span asp-validation-for="Endereco.Numero" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Endereco.Bairro" class="control-label"></label>
+                    <input asp-for="Endereco.Bairro" class="form-control" />
+                    <span asp-validation-for="Endereco.Bairro" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label asp-for="Endereco.Complemento" class="control-label"></label>
+                    <input asp-for="Endereco.Complemento" class="form-control" />
+                    <span asp-validation-for="Complemento" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Endereco.Referencia" class="control-label"></label>
+                    <input asp-for="Endereco.Referencia" class="form-control" />
+                    <span asp-validation-for="Endereco.Referencia" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                @if (Model.UsuarioCadastroId != Guid.Empty)
+                {
+                    <div class="col-md-6">
+                        <br />
+                        <input asp-for="_InfoCadastro" class="form-control" readonly></input>
+                    </div>
+                }
+                @if (Model.UsuarioAlteracaoId != Guid.Empty)
+                {
+                    <div class="col-md-6">
+                        <br />
+                        <input asp-for="_InfoAlteracao" class="form-control" readonly></input>
+                    </div>
+                }
+            </div>
+            <div class="form-group">
+                <br />
+                <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+                <button type="button" onclick="chamarSalvar()" class="btn btn-success">Salvar Registro</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function chamarSalvar() {
+            var id = $("#Id").val();
+            var url = '@Model.Id';
+            SalvarQuandoNaoModal('frm', url)
+        }
+    </script>
+}
