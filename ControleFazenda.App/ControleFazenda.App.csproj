@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\arquivos\nfes\" />
     <Folder Include="wwwroot\img\" />
     <Folder Include="wwwroot\reports\" />
   </ItemGroup>

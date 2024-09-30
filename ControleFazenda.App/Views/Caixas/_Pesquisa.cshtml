@@ -15,6 +15,9 @@
                                 Caixa Nº
                             </th>
                             <th>
+                                @Html.DisplayNameFor(model => model.TotalFluxo)
+                            </th>
+                            <th>
                                 @Html.DisplayNameFor(model => model.Situacao)
                             </th>
                             <th></th>
@@ -26,6 +29,9 @@
                             <tr>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Numero)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TotalFluxo)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Situacao)

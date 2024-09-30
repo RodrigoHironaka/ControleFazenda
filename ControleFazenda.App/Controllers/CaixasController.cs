@@ -77,9 +77,9 @@ namespace ControleFazenda.App.Controllers
                 var usuLogado = await _userManager.GetUserAsync(User);
                 var caixasVM = new List<CaixaVM>();
                 if (usuLogado != null)
-                    caixasVM = _mapper.Map<List<CaixaVM>>(await _caixaServico.Buscar(x => x.UsuarioCadastroId == Guid.Parse(usuLogado.Id)));
-                
-                return PartialView("_Pesquisa", caixasVM);
+                    caixasVM = _mapper.Map<List<CaixaVM>>(await _caixaServico.ObterCaixasComFluxosDeCaixa(x => x.UsuarioCadastroId == Guid.Parse(usuLogado.Id)));
+
+                return PartialView("_Pesquisa", caixasVM.OrderByDescending(x => x.Numero));
             }
             catch (Exception ex)
             {

@@ -1,21 +1,46 @@
-﻿using ControleFazenda.Business.Entidades.Enum;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using NumeroExtenso;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using ControleFazenda.Business.Entidades.Enum;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ControleFazenda.App.ViewModels
 {
-    public class CaixaVM
+    public class NFeVM
     {
         [Key]
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        [DisplayName("Situação")]
-        public SituacaoCaixa Situacao { get; set; } = SituacaoCaixa.Aberto;
-
         [DisplayName("Número")]
         public Int64 Numero { get; set; }
+
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [Moeda]
+        public decimal Valor { get; set; }
+
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [DisplayName("Emissão")]
+        public DateTime Emissao { get; set; } = DateTime.Now;
+
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [DisplayName("Recebi NFe em")]
+        public DateTime RecebimentoNFe { get; set; } = DateTime.Now;
+
+        [DisplayName("Tipo NFe")]
+        public TipoNFe TipoNFe { get; set; } = TipoNFe.Produto;
+
+        [DisplayName("Arquivo")]
+        public string? CaminhoArquivo { get; set; }
+
+        public IFormFile? Arquivo { get; set; }
+
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [DisplayName("Fornecedor")]
+        public Guid FornecedorId { get; set; }
+        public FornecedorVM? Fornecedor { get; set; }
+        public IEnumerable<FornecedorVM>? Fornecedores { get; set; }
 
         [ScaffoldColumn(false)]
         public DateTime DataCadastro { get; set; }
@@ -44,20 +69,5 @@ namespace ControleFazenda.App.ViewModels
                 return $"Alteração: {UsuarioAlteracao?.UserName} - {DataAlteracao}";
             }
         }
-
-        public IEnumerable<FluxoCaixaVM>? FluxosCaixa { get; set; }
-
-        public string TotalFluxo
-        {
-            get
-            {
-                if (FluxosCaixa != null && FluxosCaixa.Count() > 0)
-                    return FluxosCaixa.Sum(x => x.Valor).ToString("N2");
-                else
-                    return 0.ToString("N2");
-            }
-        }
     }
 }
-
-

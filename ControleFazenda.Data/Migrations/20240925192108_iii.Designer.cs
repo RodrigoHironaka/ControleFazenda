@@ -4,6 +4,7 @@ using ControleFazenda.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControleFazenda.Data.Migrations
 {
     [DbContext(typeof(ContextoPrincipal))]
-    partial class ContextoPrincipalModelSnapshot : ModelSnapshot
+    [Migration("20240925192108_iii")]
+    partial class iii
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -290,9 +293,6 @@ namespace ControleFazenda.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CaminhoArquivo")
-                        .HasColumnType("varchar(500)");
 
                     b.Property<DateTime>("DataAlteracao")
                         .HasColumnType("datetime2");

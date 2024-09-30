@@ -1,13 +1,8 @@
-﻿using ControleFazenda.Business.Interfaces.Repositorios;
-using ControleFazenda.Business.Interfaces;
-using ControleFazenda.Business.Interfaces.Servicos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ControleFazenda.Business.Entidades;
 using ControleFazenda.Business.Entidades.Validacoes;
-using ControleFazenda.Business.Entidades;
+using ControleFazenda.Business.Interfaces;
+using ControleFazenda.Business.Interfaces.Repositorios;
+using ControleFazenda.Business.Interfaces.Servicos;
 using System.Linq.Expressions;
 
 namespace ControleFazenda.Business.Servicos

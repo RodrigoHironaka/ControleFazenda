@@ -17,6 +17,7 @@ namespace ControleFazenda.App.AutoMapper
             CreateMap<Fornecedor, FornecedorVM>().ReverseMap();
             CreateMap<Endereco, EnderecoVM>().ReverseMap();
             CreateMap<Recibo, ReciboVM>().ReverseMap();
+            CreateMap<NFe, NFeVM>().ReverseMap();
         }
     }
 }

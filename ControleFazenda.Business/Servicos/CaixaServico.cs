@@ -67,5 +67,10 @@ namespace ControleFazenda.Business.Servicos
         {
             return await _caixaRepositorio.ObterPorIdComFluxosDeCaixa(Id);
         }
+
+        public async Task<List<Caixa>> ObterCaixasComFluxosDeCaixa(Expression<Func<Caixa, bool>>? predicate = null)
+        {
+            return await _caixaRepositorio.ObterCaixasComFluxosDeCaixa(predicate);
+        }
     }
 }

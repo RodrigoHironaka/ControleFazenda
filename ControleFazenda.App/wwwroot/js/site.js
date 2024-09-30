@@ -91,6 +91,57 @@ function SalvarQuandoNaoModal(formId, url) {
         }
     });
 }
+
+function SalvarQuandoModalComArquivo(formId, url) {
+    // Cria um objeto FormData para enviar os dados do formulário
+    var formData = new FormData($("#" + formId)[0]);
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: formData,
+        contentType: false, // Necessário para evitar que o jQuery defina o contentType automaticamente
+        processData: false, // Impede que o jQuery processe os dados
+        success: function (response) {
+            if (response.success) {
+                // Sucesso: fechar a modal e atualizar a página
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Sucesso!',
+                    text: 'Operação realizada com sucesso.',
+                    timer: 5000
+                }).then(function () {
+                    $('#modal').modal('hide');
+                    // Após o popup ser fechado, recarrega a página
+                    window.location.reload();
+                });
+            }
+            else if (response.isModelState) {
+                // Erros de validação: atualizar os spans de validação na modal
+                $.each(response.errors, function (key, value) {
+                    var errorMessage = $("<span class='text-danger'></span>").text(value);
+                    $("#" + key).siblings(".text-danger").remove(); // Remove erros antigos, se houver
+                    $("#" + key).parent().append(errorMessage); // Adiciona o novo erro
+                });
+            }
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: response.errors,
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: 'Ocorreu um erro ao enviar o arquivo. Por favor, tente novamente.',
+            });
+        }
+    });
+}
+
 //-------------------------------------------------------------------------------------
 
 //Excluir------------------------------------------------------------------------------
@@ -136,14 +187,19 @@ function Excluir(id, url) {
 }
 //-------------------------------------------------------------------------------------
 
-$(document).ready(function () {
-    $('.tabela').DataTable({
-        "language": {
-            "url": "//cdn.datatables.net/plug-ins/2.1.5/i18n/pt-BR.json"
+function InitializeDataTable(selector, options = {}) {
+    const defaultOptions = {
+        language: {
+            url: '/json/pt-BR_Datatables.json',
         },
-        responsive: true
-    });
-});
+    };
+
+    // Mescla as opções padrão com as opções fornecidas
+    const finalOptions = { ...defaultOptions, ...options };
+
+    // Inicializa a tabela
+    return new DataTable(selector, finalOptions);
+}
 
 function BuscaCep() {
     $(document).ready(function () {
@@ -212,3 +268,22 @@ function BuscaCep() {
 $(document).ready(function () {
     $("#msg_box").fadeOut(2500);
 });
+
+function abrirArquivoPorId(id) {
+    const url = `/abrir-arquivo/${id}`; // URL com rota
+
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (response) {
+            
+        },
+        error: function (xhr) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: xhr.responseText,
+            });
+        }
+    });
+}

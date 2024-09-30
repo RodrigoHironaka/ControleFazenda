@@ -1,0 +1,92 @@
+﻿@model IEnumerable<ControleFazenda.App.ViewModels.NFeVM>
+
+@{
+    ViewData["Title"] = "Lista de NFes";
+}
+
+<h1>@ViewData["Title"]?.ToString()?.ToUpper()</h1>
+
+<p>
+    <button class=" w-100 btn btn-success novo" data-id="@Guid.Empty"><i class="bi bi-plus-lg"></i> Novo</button>
+</p>
+<table class="table table-bordered table-striped table-hover small tabela">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Numero)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fornecedor.RazaoSocial)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Emissao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RecebimentoNFe)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Valor)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Numero)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fornecedor.RazaoSocial)
+                </td>
+                <td>
+                    @Html.Raw(item.Emissao.ToShortDateString())
+                </td>
+                <td>
+                    @Html.Raw(item.RecebimentoNFe.ToShortDateString())
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Valor)
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-primary modal-trigger editar" data-id="@item.Id"><i class="bi bi-pencil-square"></i></button>
+                    <button class="btn btn-sm btn-danger modal-trigger excluir" data-id="@item.Id"><i class="bi bi-trash-fill"></i></button>
+                    @if(item.CaminhoArquivo != null)
+                    {
+                        <button class="btn btn-sm btn-outline-dark modal-trigger abrirArquivo" data-id="@item.Id.ToString()"><i class="bi bi-file-earmark-image"></i></button>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div id="modal" class="modal fade" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false"></div>
+
+@section Scripts
+{
+    <script>
+        function chamarExcluir(id) {
+            var url = 'excluir-nfe/' + id;
+            Excluir(id, url)
+        }
+
+        $(document).ready(function () {
+            abrirModal(".novo", "NOVO REGISTRO", "/editar-nfe/");
+            abrirModal(".editar", "EDITAR REGISTRO", "/editar-nfe/");
+
+            $('.excluir').click(function () {
+                var itemId = $(this).data('id');
+                chamarExcluir(itemId);
+            });
+
+            $('.abrirArquivo').click(function () {
+                var itemId = $(this).data('id');
+                abrirArquivoPorId(itemId);
+            });
+        });
+
+        InitializeDataTable('.tabela');
+    </script>
+}

@@ -1,4 +1,5 @@
 ﻿using ControleFazenda.Business.Entidades;
+using System.Linq.Expressions;
 
 namespace ControleFazenda.Business.Interfaces.Repositorios
 {
@@ -7,5 +8,6 @@ namespace ControleFazenda.Business.Interfaces.Repositorios
         Task<Caixa> ObterCaixaAberto(string idUsuario);
         Task<Int64> ObterNumeroUltimoCaixa(string idUsuario);
         Task<Caixa> ObterPorIdComFluxosDeCaixa(Guid Id);
+        Task<List<Caixa>> ObterCaixasComFluxosDeCaixa(Expression<Func<Caixa, bool>>? predicate = null);
     }
 }
