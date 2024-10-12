@@ -56,6 +56,8 @@ namespace ControleFazenda.App.Controllers
                 valeVM = _mapper.Map<ValeVM>(vale);
                 valeVM.UsuarioCadastro = await _userManager.FindByIdAsync(valeVM.UsuarioCadastroId.ToString());
                 valeVM.UsuarioAlteracao = await _userManager.FindByIdAsync(valeVM.UsuarioAlteracaoId.ToString());
+                if (valeVM.Valor < 0)
+                    valeVM.Valor *= -1;
                 valeVM = await PopularColaboradores(valeVM);
             }
             else
@@ -89,7 +91,8 @@ namespace ControleFazenda.App.Controllers
                         valeVM.DataAlteracao = DateTime.Now;
                         vale = _mapper.Map<Vale>(valeVM);
                         vale.UsuarioAlteracaoId = Guid.Parse(user.Id);
-
+                        if (vale.Situacao == Situacao.Inativo)
+                            vale.Valor *= -1;
                         await _logAlteracaoServico.CompararAlteracoes(valeClone, vale, Guid.Parse(user.Id), $"Vale[{vale.Id}]");
                         await _valeServico.Atualizar(vale);
 
@@ -99,6 +102,8 @@ namespace ControleFazenda.App.Controllers
                         vale = _mapper.Map<Vale>(valeVM);
                         vale.UsuarioCadastroId = Guid.Parse(user.Id);
                         vale.Numero = await _valeServico.ObterNumeroUltimoVale() + 1;
+                        if (vale.Situacao == Situacao.Inativo)
+                            vale.Valor *= -1;
                         await _valeServico.Adicionar(vale);
                     }
 
@@ -234,7 +239,7 @@ namespace ControleFazenda.App.Controllers
                 table.AddCell(new PdfPCell(new Phrase(valeVM.Valor.ToString("C"), estiloNumValor)) { BorderWidth = 1f });
 
                 table.AddCell(new PdfPCell(new Phrase("Colaborador", estiloNumValor)) { BorderWidth = 1f });
-                table.AddCell(new PdfPCell(new Phrase(valeVM.Colaborador?.RazaoSocial.ToUpper(), estiloPadrao)) { BorderWidth = 1f, Colspan = 3 });
+                table.AddCell(new PdfPCell(new Phrase(valeVM.Colaborador?.RazaoSocial?.ToUpper(), estiloPadrao)) { BorderWidth = 1f, Colspan = 3 });
 
                 table.AddCell(new PdfPCell(new Phrase("Data", estiloNumValor)) { BorderWidth = 1f });
                 table.AddCell(new PdfPCell(new Phrase(valeVM.Data.ToShortDateString(), estiloPadrao)) { BorderWidth = 1f, Colspan = 3 });
@@ -243,7 +248,7 @@ namespace ControleFazenda.App.Controllers
                 table.AddCell(new PdfPCell(new Phrase(valeVM.ValorPorExtenso, estiloPadrao)) { BorderWidth = 1f, Colspan = 3 });
 
                 table.AddCell(new PdfPCell(new Phrase("Autorizado por ", estiloNumValor)) { BorderWidth = 1f, Colspan = 1 });
-                table.AddCell(new PdfPCell(new Phrase(valeVM.AutorizadoPor.ToUpper(), estiloPadrao)) { BorderWidth = 1f, Colspan = 3 });
+                table.AddCell(new PdfPCell(new Phrase(valeVM.AutorizadoPor?.ToUpper(), estiloPadrao)) { BorderWidth = 1f, Colspan = 3 });
 
                 table.AddCell(new PdfPCell(new Phrase("Assinatura ", estiloNumValor)) { BorderWidth = 1f, Colspan = 1 });
                 table.AddCell(new PdfPCell(new Phrase(" ", estiloPadrao)) { BorderWidth = 1f, Colspan = 3 });
@@ -258,7 +263,7 @@ namespace ControleFazenda.App.Controllers
                 var pdfBytes = memoryStream.ToArray();
                 var contentDisposition = new ContentDispositionHeaderValue("inline")
                 {
-                    FileName = "Recibo.pdf"
+                    FileName = "Vale.pdf"
                 };
 
                 Response.Headers[HeaderNames.ContentDisposition] = contentDisposition.ToString();

@@ -4,7 +4,15 @@
     ViewData["Title"] = "Lista de Vales";
 }
 
-<h1>@ViewData["Title"]?.ToString()?.ToUpper()</h1>
+<div class="row">
+    <div class="col-md-6">
+        <h1>@ViewData["Title"]?.ToString()?.ToUpper()</h1>
+    </div>
+    <div class="col-md-6">
+        <h1 class="text-end">@Model.Sum(x=> x.Valor).ToString("C2")</h1>
+    </div>
+</div>
+
 
 <p>
     <button class=" w-100 btn btn-success novo" data-id="@Guid.Empty"><i class="bi bi-plus-lg"></i> Novo</button>
@@ -24,7 +32,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Colaborador)
             </th>
-            <th></th>
+            <th>Opções</th>
         </tr>
     </thead>
     <tbody>
@@ -39,10 +47,17 @@
                     @Html.DisplayFor(modelItem => item.Valor)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Data)
+                    @Html.Raw(item.Data.ToShortDateString())
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Colaborador.RazaoSocial)
+                    @if (item.Colaborador != null)
+                    {
+                        @Html.DisplayFor(modelItem => item.Colaborador.RazaoSocial)
+                    }
+                    else
+                    {
+                        @Html.Raw("Não existe colaborador!");
+                    }
                 </td>
                 <td>
                     <button class="btn btn-sm btn-primary modal-trigger editar" data-id="@item.Id"><i class="bi bi-pencil-square"></i></button>

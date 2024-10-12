@@ -192,6 +192,43 @@ function InitializeDataTable(selector, options = {}) {
         language: {
             url: '/json/pt-BR_Datatables.json',
         },
+        layout: {
+            topStart: {
+                buttons: [
+                    {
+                        extend: 'print',
+                        exportOptions: {
+                            columns: ':visible' // Somente colunas visíveis
+                        }
+                    },
+                    {
+                        extend: 'copy',
+                        exportOptions: {
+                            columns: ':visible' // Somente colunas visíveis
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: ':visible' // Somente colunas visíveis
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        exportOptions: {
+                            columns: ':visible' // Somente colunas visíveis
+                        }
+                    },
+                    'colvis' // Botão para alternar a visibilidade das colunas
+                ]
+            }
+        }
+        //layout: {
+              //SIMPLIFICADO
+        //    topStart: {
+        //        buttons: [ 'print', 'copy', 'excel', 'pdf', 'colvis']
+        //    }
+        //}
     };
 
     // Mescla as opções padrão com as opções fornecidas

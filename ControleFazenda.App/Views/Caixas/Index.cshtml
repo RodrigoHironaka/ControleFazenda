@@ -23,6 +23,7 @@
         {
             <button type="button" class="btn btn-success novo" data-id="@Guid.Empty"><i class="bi bi-plus-lg"></i> Adicionar</button>
         }
+        <a type="button" class="btn btn-outline-dark" asp-action="Index" asp-controller="Vales"><i class="bi bi-eye"></i> Ver Vales</a>
     </div>
     <div class="col-md-4">
         @if (Model.Id != Guid.Empty)
@@ -60,20 +61,25 @@
                         @Html.DisplayFor(modelItem => item.DebitoCredito)
                     </td>
                     <td>
-                        @Html.Raw(item.Data.Value.ToShortDateString())
+                        @if (item.Data != null)
+                        {
+                            @Html.Raw(item.Data.Value.ToShortDateString())
+                        }
+                        else{
+                            @Html.Raw(DateTime.MinValue);
+                        }
                     </td>
                     <td style="text-align:right">
-                        @if (item.DebitoCredito == DebitoCredito.Credito)
-                        {
                             @Html.DisplayFor(modelItem => item.Valor)
-                        }
-                        else
-                        {
-                            @Html.DisplayFor(modelItem => item.Valor)
-                        }
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.FormaPagamento.Nome)
+                        @if(item.FormaPagamento != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.FormaPagamento.Nome)
+                        }else{
+                            @Html.Raw("Não existe forma de pagamento!");
+                        }
+                        
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Descricao)
