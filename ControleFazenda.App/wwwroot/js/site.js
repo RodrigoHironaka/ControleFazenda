@@ -222,6 +222,10 @@ function InitializeDataTable(selector, options = {}) {
                     'colvis' // Botão para alternar a visibilidade das colunas
                 ]
             }
+        },
+        responsive: true,
+        rowReorder: {
+            selector: 'td:nth-child(2)'
         }
         //layout: {
               //SIMPLIFICADO
