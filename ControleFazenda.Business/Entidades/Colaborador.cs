@@ -10,5 +10,6 @@ namespace ControleFazenda.Business.Entidades
         public Situacao Situacao { get; set; } = Situacao.Ativo;
 
         public ICollection<Recibo> Recibos { get; set; } = new List<Recibo>();
+        public ICollection<Vale> Vales { get; set; } = new List<Vale>();
     }
 }

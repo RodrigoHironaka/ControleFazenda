@@ -19,6 +19,7 @@ namespace ControleFazenda.Data.Context
         public DbSet<Fornecedor> Fornecedores { get; set; }
         public DbSet<Recibo> Recibos { get; set; }
         public DbSet<NFe> NFes { get; set; }
+        public DbSet<Vale> Vales { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

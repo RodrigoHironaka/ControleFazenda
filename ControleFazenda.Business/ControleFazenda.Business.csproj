@@ -8,8 +8,9 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.9.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.10" />
     <PackageReference Include="ObjectsComparer" Version="1.4.1" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
 </Project>

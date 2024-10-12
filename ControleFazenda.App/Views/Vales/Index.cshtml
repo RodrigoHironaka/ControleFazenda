@@ -1,0 +1,99 @@
+﻿@model IEnumerable<ControleFazenda.App.ViewModels.ValeVM>
+
+@{
+    ViewData["Title"] = "Lista de Vales";
+}
+
+<h1>@ViewData["Title"]?.ToString()?.ToUpper()</h1>
+
+<p>
+    <button class=" w-100 btn btn-success novo" data-id="@Guid.Empty"><i class="bi bi-plus-lg"></i> Novo</button>
+</p>
+<table class="table table-bordered table-striped table-hover small tabela">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Numero)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Valor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Data)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Colaborador)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var situacao = item.Situacao == ControleFazenda.Business.Entidades.Enum.Situacao.Inativo ? "text-warning fw-bold" : "";
+            <tr class="@situacao">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Numero)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Valor)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Data)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Colaborador.RazaoSocial)
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-primary modal-trigger editar" data-id="@item.Id"><i class="bi bi-pencil-square"></i></button>
+                    <button class="btn btn-sm btn-danger modal-trigger excluir" data-id="@item.Id"><i class="bi bi-trash-fill"></i></button>
+                    <a class="btn btn-sm btn-outline-dark modal-trigger imprimir" target="_blank" asp-action="ImprimirVale" asp-route-id="@item.Id" data-id="@item.Id"><i class="bi bi-printer-fill"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div id="modal" class="modal fade" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false"></div>
+
+@section Scripts
+{
+    <script>
+        InitializeDataTable('.tabela', { order: [[0, 'desc']] });
+        function chamarExcluir(id) {
+            var url = 'excluir-vale/' + id;
+            Excluir(id, url)
+        }
+
+        $(document).ready(function () {
+            abrirModal(".novo", "NOVO REGISTRO", "/editar-vale/");
+            abrirModal(".editar", "EDITAR REGISTRO", "/editar-vale/");
+
+            $('.excluir').click(function () {
+                var itemId = $(this).data('id');
+                chamarExcluir(itemId);
+            });
+
+            $('.imprimir').click(function () {
+                var id = $(this).data('id');
+                var url = 'imprimir-vale/' + id;
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function () {
+                        // Nenhum retorno necessário, a função pode ficar vazia
+                    },
+                    error: function (xhr, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: error,
+                        });
+                    }
+                });
+            });
+        });
+
+        
+    </script>
+}

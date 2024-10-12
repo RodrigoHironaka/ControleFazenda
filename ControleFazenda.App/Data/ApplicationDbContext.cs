@@ -10,6 +10,7 @@ namespace ControleFazenda.App.Data
             : base(options)
         {
         }
+        public DbSet<ControleFazenda.App.ViewModels.ValeVM> ValeVM { get; set; } = default!;
         
     }
 }
