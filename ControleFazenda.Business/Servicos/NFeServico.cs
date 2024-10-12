@@ -43,6 +43,11 @@ namespace ControleFazenda.Business.Servicos
             _nfeRepositorio?.Dispose();
         }
 
+        public async Task<List<NFe>> ObterNFeComFornecedor(Expression<Func<NFe, bool>>? predicate = null)
+        {
+            return await _nfeRepositorio.ObterNFeComFornecedor(predicate);
+        }
+
         public async Task<NFe> ObterPorId(Guid id)
         {
             return await _nfeRepositorio.ObterPorId(id);
