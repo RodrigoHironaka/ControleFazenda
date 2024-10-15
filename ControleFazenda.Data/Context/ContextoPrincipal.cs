@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ControleFazenda.Data.Context
 {
-    public class ContextoPrincipal : IdentityDbContext
+    public class ContextoPrincipal : IdentityDbContext<Usuario>
     {
         public ContextoPrincipal(DbContextOptions options) : base(options)
         {

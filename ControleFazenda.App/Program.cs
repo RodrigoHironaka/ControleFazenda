@@ -1,6 +1,9 @@
 using ControleFazenda.App.Configurations;
 using ControleFazenda.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using ControleFazenda.App.Data;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 

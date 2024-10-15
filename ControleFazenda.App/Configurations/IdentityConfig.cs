@@ -1,4 +1,6 @@
 ﻿using ControleFazenda.App.Data;
+using ControleFazenda.Business.Entidades;
+using ControleFazenda.Data.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,13 +17,17 @@ namespace ControleFazenda.App.Configurations
             });
 
             var connectionString = configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Conexão string 'DefaultConnection' não encontrada.");
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<ContextoPrincipal>(options =>
                 options.UseSqlServer(connectionString));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options =>
+            //services.AddIdentity<Usuario, IdentityRole>()
+            //        .AddEntityFrameworkStores<ContextoPrincipal>()
+            //        .AddDefaultTokenProviders();
+
+            services.AddDefaultIdentity<Usuario>(options =>
                 options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ContextoPrincipal>();
 
             return services;
         }
