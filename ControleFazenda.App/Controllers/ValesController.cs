@@ -4,6 +4,7 @@ using ControleFazenda.Business.Entidades;
 using ControleFazenda.Business.Entidades.Enum;
 using ControleFazenda.Business.Interfaces;
 using ControleFazenda.Business.Interfaces.Servicos;
+using ControleFazenda.Business.Servicos;
 using ControleFazenda.Data.Context;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
@@ -41,7 +42,22 @@ namespace ControleFazenda.App.Controllers
         [Route("lista-de-vales")]
         public async Task<IActionResult> Index()
         {
-            return View(_mapper.Map<IEnumerable<ValeVM>>(await _valeServico.ObterTodosComColaborador()).OrderByDescending(x => x.Numero));
+            Usuario? user = await _userManager.GetUserAsync(User);
+            var vales = await _valeServico.ObterTodosComColaborador();
+            var valesVM = _mapper.Map<List<ValeVM>>(vales);
+            var valesFazenda = new List<ValeVM>();
+            if (user != null)
+            {
+                foreach (var item in valesVM)
+                {
+                    Usuario? usuario = await _userManager.FindByIdAsync(item.UsuarioCadastroId.ToString());
+                    if (usuario?.Fazenda == user.Fazenda)
+                        valesFazenda.Add(item);
+                }
+                return View(valesFazenda);
+            }
+            else
+                return View(new List<ValeVM>());
         }
 
         [Route("editar-vale/{id}")]

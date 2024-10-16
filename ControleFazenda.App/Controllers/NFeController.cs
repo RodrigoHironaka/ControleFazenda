@@ -44,7 +44,22 @@ namespace ControleFazenda.App.Controllers
         [Route("lista-de-nfes")]
         public async Task<IActionResult> Index()
         {
-            return View(_mapper.Map<IEnumerable<NFeVM>>(await _nfeServico.ObterTodosComFornecedor()));
+            Usuario? user = await _userManager.GetUserAsync(User);
+            var nfes = await _nfeServico.ObterNFeComFornecedor();
+            var nfesVM = _mapper.Map<List<NFeVM>>(nfes);
+            var nfesFazenda = new List<NFeVM>();
+            if (user != null)
+            {
+                foreach (var item in nfesVM)
+                {
+                    Usuario? usuario = await _userManager.FindByIdAsync(item.UsuarioCadastroId.ToString());
+                    if (usuario?.Fazenda == user.Fazenda)
+                        nfesFazenda.Add(item);
+                }
+                return View(nfesFazenda);
+            }
+            else
+                return View(new List<NFeVM>());
         }
 
         [Route("editar-nfe/{id}")]

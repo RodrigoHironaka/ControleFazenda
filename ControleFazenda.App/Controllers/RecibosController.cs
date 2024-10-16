@@ -46,7 +46,22 @@ namespace ControleFazenda.App.Controllers
         [Route("lista-de-recibos")]
         public async Task<IActionResult> Index()
         {
-            return View(_mapper.Map<IEnumerable<ReciboVM>>(await _reciboServico.ObterTodosComColaborador()));
+            Usuario? user = await _userManager.GetUserAsync(User);
+            var recibos = await _reciboServico.ObterTodosComColaborador();
+            var recibosVM = _mapper.Map<List<ReciboVM>>(recibos);
+            var recibosFazenda = new List<ReciboVM>();
+            if (user != null)
+            {
+                foreach (var item in recibosVM)
+                {
+                    Usuario? usuario = await _userManager.FindByIdAsync(item.UsuarioCadastroId.ToString());
+                    if (usuario?.Fazenda == user.Fazenda)
+                        recibosFazenda.Add(item);
+                }
+                return View(recibosFazenda);
+            }
+            else
+                return View(new List<ReciboVM>());
         }
 
         [Route("editar-recibo/{id}")]
