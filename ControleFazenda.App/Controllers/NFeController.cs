@@ -48,7 +48,7 @@ namespace ControleFazenda.App.Controllers
             var nfes = await _nfeServico.ObterNFeComFornecedor();
             var nfesVM = _mapper.Map<List<NFeVM>>(nfes);
             var nfesFazenda = new List<NFeVM>();
-            if (user != null)
+            if (user != null && user.AcessoTotal == false)
             {
                 foreach (var item in nfesVM)
                 {
@@ -59,7 +59,11 @@ namespace ControleFazenda.App.Controllers
                 return View(nfesFazenda);
             }
             else
-                return View(new List<NFeVM>());
+            {
+                nfes = await _nfeServico.ObterTodos();
+                nfesVM = _mapper.Map<List<NFeVM>>(nfes);
+                return View(nfesVM);
+            }
         }
 
         [Route("editar-nfe/{id}")]

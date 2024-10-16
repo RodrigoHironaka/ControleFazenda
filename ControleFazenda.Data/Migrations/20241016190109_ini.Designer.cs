@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControleFazenda.Data.Migrations
 {
     [DbContext(typeof(ContextoPrincipal))]
-    [Migration("20241015182314_ini")]
+    [Migration("20241016190109_ini")]
     partial class ini
     {
         /// <inheritdoc />
@@ -393,6 +393,9 @@ namespace ControleFazenda.Data.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<bool>("AcessoTotal")
+                        .HasColumnType("bit");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Net.Http.Headers;
 using ControleFazenda.App.Extensions;
+using ControleFazenda.Business.Servicos;
 
 namespace ControleFazenda.App.Controllers
 {
@@ -50,7 +51,7 @@ namespace ControleFazenda.App.Controllers
             var recibos = await _reciboServico.ObterTodosComColaborador();
             var recibosVM = _mapper.Map<List<ReciboVM>>(recibos);
             var recibosFazenda = new List<ReciboVM>();
-            if (user != null)
+            if (user != null && user.AcessoTotal == false)
             {
                 foreach (var item in recibosVM)
                 {
@@ -61,7 +62,11 @@ namespace ControleFazenda.App.Controllers
                 return View(recibosFazenda);
             }
             else
-                return View(new List<ReciboVM>());
+            {
+                recibos = await _reciboServico.ObterTodos();
+                recibosVM = _mapper.Map<List<ReciboVM>>(recibos);
+                return View(recibosVM);
+            }
         }
 
         [Route("editar-recibo/{id}")]

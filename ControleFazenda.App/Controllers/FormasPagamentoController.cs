@@ -41,7 +41,7 @@ namespace ControleFazenda.App.Controllers
             var formas = await _formaPagamentoServico.ObterTodos();
             var formasVM = _mapper.Map<List<FormaPagamentoVM>>(formas);
             var formasFazenda = new List<FormaPagamentoVM>();
-            if (user != null)
+            if (user != null && user.AcessoTotal == false)
             {
                 foreach (var item in formasVM)
                 {
@@ -52,7 +52,11 @@ namespace ControleFazenda.App.Controllers
                 return View(formasFazenda);
             }
             else
-                return View(new List<FormaPagamentoVM>());
+            {
+                formas = await _formaPagamentoServico.ObterTodos();
+                formasVM = _mapper.Map<List<FormaPagamentoVM>>(formas);
+                return View(formasVM);
+            }
         }
 
         [Route("editar-formapagamento/{id}")]

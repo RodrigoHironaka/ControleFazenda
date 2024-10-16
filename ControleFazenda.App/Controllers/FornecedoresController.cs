@@ -43,7 +43,7 @@ namespace ControleFazenda.App.Controllers
             var fornecedores = await _fornecedorServico.ObterTodos();
             var fornecedoresVM = _mapper.Map<List<FornecedorVM>>(fornecedores);
             var fornecedoresFazenda = new List<FornecedorVM>();
-            if (user != null)
+            if (user != null && user.AcessoTotal == false)
             {
                 foreach (var item in fornecedoresVM)
                 {
@@ -54,7 +54,11 @@ namespace ControleFazenda.App.Controllers
                 return View(fornecedoresFazenda);
             }
             else
-                return View(new List<FornecedorVM>());
+            {
+                fornecedores = await _fornecedorServico.ObterTodos();
+                fornecedoresVM = _mapper.Map<List<FornecedorVM>>(fornecedores);
+                return View(fornecedoresVM);
+            }
         }
 
         [Route("editar-fornecedor/{id}")]

@@ -4,6 +4,7 @@ using ControleFazenda.Business.Entidades;
 using ControleFazenda.Business.Entidades.Enum;
 using ControleFazenda.Business.Interfaces;
 using ControleFazenda.Business.Interfaces.Servicos;
+using ControleFazenda.Business.Servicos;
 using ControleFazenda.Data.Context;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -41,7 +42,9 @@ namespace ControleFazenda.App.Controllers
         public async Task<IActionResult> Index(Guid Id)
         {
             Caixa? caixa = new Caixa();
+            var caixas = new List<Caixa>();
             CaixaVM caixaVM = new CaixaVM();
+            var caixasVM = new List<CaixaVM>();
 
             var usuLogado = await _userManager.GetUserAsync(User);
 
@@ -50,8 +53,8 @@ namespace ControleFazenda.App.Controllers
                 if(Id == Guid.Empty)
                 {
                     Usuario? user = await _userManager.GetUserAsync(User);
-                    var caixas = await _caixaServico.ObterCaixasAberto();
-                    var caixasVM = _mapper.Map<List<CaixaVM>>(caixas);
+                    caixas = await _caixaServico.ObterCaixasAberto();
+                    caixasVM = _mapper.Map<List<CaixaVM>>(caixas);
                     if (user != null)
                     {
                         foreach (var item in caixasVM)
@@ -76,8 +79,8 @@ namespace ControleFazenda.App.Controllers
                 else
                 {
                     Usuario? user = await _userManager.GetUserAsync(User);
-                    var caixas = await _caixaServico.ObterTodosComFluxosDeCaixa();
-                    var caixasVM = _mapper.Map<List<CaixaVM>>(caixas);
+                    caixas = await _caixaServico.ObterTodosComFluxosDeCaixa();
+                    caixasVM = _mapper.Map<List<CaixaVM>>(caixas);
                     if (user != null)
                     {
                         foreach (var item in caixasVM)
@@ -88,7 +91,6 @@ namespace ControleFazenda.App.Controllers
                         }
                     }
                 }
-               
             }
             return View(caixaVM);
         }
@@ -103,7 +105,7 @@ namespace ControleFazenda.App.Controllers
                 var caixas = await _caixaServico.ObterTodosComFluxosDeCaixa();
                 var caixasVM = _mapper.Map<List<CaixaVM>>(caixas);
                 var caixasFazendaVM = new List<CaixaVM>();
-                if (user != null)
+                if (user != null && user.AcessoTotal == false)
                 {
                     foreach (var item in caixasVM)
                     {
@@ -111,6 +113,12 @@ namespace ControleFazenda.App.Controllers
                         if (usuario?.Fazenda == user.Fazenda)
                             caixasFazendaVM.Add(item);
                     }
+                }
+                else
+                {
+                    caixas = await _caixaServico.ObterTodosComFluxosDeCaixa();
+                    caixasVM = _mapper.Map<List<CaixaVM>>(caixas);
+                    caixasFazendaVM.AddRange(caixasVM);
                 }
 
                 return PartialView("_Pesquisa", caixasFazendaVM.OrderByDescending(x => x.Numero));

@@ -31,6 +31,7 @@ namespace ControleFazenda.Data.Migrations
                 {
                     Id = table.Column<string>(type: "varchar(100)", nullable: false),
                     Fazenda = table.Column<int>(type: "int", nullable: false),
+                    AcessoTotal = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "varchar(100)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "varchar(100)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "varchar(100)", maxLength: 256, nullable: true),

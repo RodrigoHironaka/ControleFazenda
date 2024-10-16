@@ -46,7 +46,7 @@ namespace ControleFazenda.App.Controllers
             var vales = await _valeServico.ObterTodosComColaborador();
             var valesVM = _mapper.Map<List<ValeVM>>(vales);
             var valesFazenda = new List<ValeVM>();
-            if (user != null)
+            if (user != null && user.AcessoTotal == false)
             {
                 foreach (var item in valesVM)
                 {
@@ -57,7 +57,11 @@ namespace ControleFazenda.App.Controllers
                 return View(valesFazenda);
             }
             else
-                return View(new List<ValeVM>());
+            {
+                vales = await _valeServico.ObterTodos();
+                valesVM = _mapper.Map<List<ValeVM>>(vales);
+                return View(valesVM);
+            }
         }
 
         [Route("editar-vale/{id}")]

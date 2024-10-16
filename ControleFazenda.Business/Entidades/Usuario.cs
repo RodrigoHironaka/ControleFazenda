@@ -8,5 +8,8 @@ namespace ControleFazenda.Business.Entidades
     {
         [Required]
         public Fazenda Fazenda { get; set; } = Fazenda.Negrinha;
+
+        [Required]
+        public bool AcessoTotal { get; set; } = false;
     }
 }

@@ -41,7 +41,7 @@ namespace ControleFazenda.App.Controllers
             var colaboradores = await _colaboradorServico.ObterTodos();
             var colaboradoresVM = _mapper.Map<List<ColaboradorVM>>(colaboradores);
             var colabsFazenda = new List<ColaboradorVM>();
-            if (user != null)
+            if (user != null && user.AcessoTotal == false)
             {
                 foreach (var item in colaboradoresVM)
                 {
@@ -50,9 +50,13 @@ namespace ControleFazenda.App.Controllers
                         colabsFazenda.Add(item);
                 }
                 return View(colabsFazenda);
-            } 
+            }
             else
-                return View(new List<ColaboradorVM>());
+            {
+                colaboradores = await _colaboradorServico.ObterTodos();
+                colaboradoresVM = _mapper.Map<List<ColaboradorVM>>(colaboradores);
+                return View(colaboradoresVM);
+            }
         }
 
         [Route("editar-colaborador/{id}")]
