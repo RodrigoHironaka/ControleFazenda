@@ -3,6 +3,7 @@ using ControleFazenda.App.ViewModels;
 using ControleFazenda.Business.Entidades;
 using ControleFazenda.Business.Interfaces;
 using ControleFazenda.Business.Interfaces.Servicos;
+using ControleFazenda.Business.Servicos;
 using ControleFazenda.Data.Context;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -16,13 +17,13 @@ namespace ControleFazenda.App.Controllers
     {
         private readonly IFornecedorServico _fornecedorServico;
         private readonly IMapper _mapper;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<Usuario> _userManager;
         private readonly ContextoPrincipal _context;
         private readonly ILogAlteracaoServico _logAlteracaoServico;
 
         public FornecedoresController(IMapper mapper,
                                  IFornecedorServico fornecedorServico,
-                                  UserManager<IdentityUser> userManager,
+                                  UserManager<Usuario> userManager,
                                   ContextoPrincipal context,
                                   ILogAlteracaoServico logAlteracaoServico,
                                   INotificador notificador) : base(notificador)
@@ -38,7 +39,22 @@ namespace ControleFazenda.App.Controllers
         [Route("lista-de-fornecedores")]
         public async Task<IActionResult> Index()
         {
-            return View(_mapper.Map<IEnumerable<FornecedorVM>>(await _fornecedorServico.ObterTodos()));
+            Usuario? user = await _userManager.GetUserAsync(User);
+            var fornecedores = await _fornecedorServico.ObterTodos();
+            var fornecedoresVM = _mapper.Map<List<FornecedorVM>>(fornecedores);
+            var fornecedoresFazenda = new List<FornecedorVM>();
+            if (user != null)
+            {
+                foreach (var item in fornecedoresVM)
+                {
+                    Usuario? usuario = await _userManager.FindByIdAsync(item.UsuarioCadastroId.ToString());
+                    if (usuario?.Fazenda == user.Fazenda)
+                        fornecedoresFazenda.Add(item);
+                }
+                return View(fornecedoresFazenda);
+            }
+            else
+                return View(new List<FornecedorVM>());
         }
 
         [Route("editar-fornecedor/{id}")]
@@ -70,7 +86,7 @@ namespace ControleFazenda.App.Controllers
                 return Json(new { success = false, errors, isModelState = true });
             }
 
-            IdentityUser? user = await _userManager.GetUserAsync(User);
+            Usuario? user = await _userManager.GetUserAsync(User);
             Fornecedor fornecedor;
 
             if (user != null)

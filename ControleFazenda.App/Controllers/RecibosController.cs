@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Net.Http.Headers;
+using ControleFazenda.App.Extensions;
 
 namespace ControleFazenda.App.Controllers
 {
@@ -19,7 +20,7 @@ namespace ControleFazenda.App.Controllers
         private readonly IReciboServico _reciboServico;
         private readonly IColaboradorServico _colaboradorServico;
         private readonly IMapper _mapper;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<Usuario> _userManager;
         private readonly ContextoPrincipal _context;
         private readonly ILogAlteracaoServico _logAlteracaoServico;
         private readonly IWebHostEnvironment _webHostEnvironment;
@@ -27,7 +28,7 @@ namespace ControleFazenda.App.Controllers
         public RecibosController(IMapper mapper,
                                   IReciboServico reciboServico,
                                   IColaboradorServico colaboradorServico,
-                                  UserManager<IdentityUser> userManager,
+                                  UserManager<Usuario> userManager,
                                   ContextoPrincipal context,
                                   ILogAlteracaoServico logAlteracaoServico,
                                   IWebHostEnvironment webHostEnvironment,
@@ -170,7 +171,7 @@ namespace ControleFazenda.App.Controllers
         {
             var recibo = await _reciboServico.ObterPorIdComColaborador(id);
             var reciboVM = _mapper.Map<ReciboVM>(recibo);
-
+            var user = await _userManager.GetUserAsync(User);
             using (var memoryStream = new MemoryStream())
             {
                 // Cria o documento PDF
@@ -212,7 +213,7 @@ namespace ControleFazenda.App.Controllers
                 table.AddCell(new PdfPCell(new Phrase("Haroldo de Sá Quartim Barbosa", estiloNomes)) { BorderWidth = 1f, Colspan = 3 });
 
                 table.AddCell(new PdfPCell(new Phrase("Endereço ", estiloPadrao)) { BorderWidth = 1f, Colspan = 1 });
-                table.AddCell(new PdfPCell(new Phrase("Fazenda Negrinha - Parapuã - SP", estiloNomes)) { BorderWidth = 1f, Colspan = 3 });
+                table.AddCell(new PdfPCell(new Phrase(user.Fazenda.GetEnumDisplayName(), estiloNomes)) { BorderWidth = 1f, Colspan = 3 });
 
                 table.AddCell(new PdfPCell(new Phrase(" ", estiloPadrao)) { BorderWidth = 1f, Colspan = 1 });
                 table.AddCell(new PdfPCell(new Phrase(" ", estiloPadrao)) { BorderWidth = 1f, Colspan = 3 });

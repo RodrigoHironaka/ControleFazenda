@@ -18,7 +18,7 @@ namespace ControleFazenda.App.Controllers
         private readonly IFormaPagamentoServico _formaPagamentoServico;
         private readonly ICaixaServico _caixaService;
         private readonly IMapper _mapper;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<Usuario> _userManager;
         private readonly ContextoPrincipal _context;
         private readonly ILogAlteracaoServico _logAlteracaoServico;
 
@@ -26,7 +26,7 @@ namespace ControleFazenda.App.Controllers
                                   IFluxoCaixaServico fluxoCaixaServico,
                                   IFormaPagamentoServico formaPagamentoServico,
                                   ICaixaServico caixaService,
-                                  UserManager<IdentityUser> userManager,
+                                  UserManager<Usuario> userManager,
                                   ContextoPrincipal context,
                                   ILogAlteracaoServico logAlteracaoServico,
                                   INotificador notificador) : base(notificador)
@@ -43,7 +43,7 @@ namespace ControleFazenda.App.Controllers
         [Route("lista-de-fluxos")]
         public async Task<IActionResult> Index()
         {
-            IdentityUser? user = await _userManager.GetUserAsync(User);
+            Usuario? user = await _userManager.GetUserAsync(User);
             if(user != null)
             {
                 var caixa = _caixaService.ObterCaixaAberto(user.Id);
@@ -60,7 +60,7 @@ namespace ControleFazenda.App.Controllers
         [Route("editar-fluxo-caixa/{id}")]
         public async Task<IActionResult> Editar(Guid Id)
         {
-            IdentityUser? user = await _userManager.GetUserAsync(User);
+            Usuario? user = await _userManager.GetUserAsync(User);
             if (user != null)
             {
                 var caixa = await _caixaService.ObterCaixaAberto(user.Id);
@@ -103,7 +103,7 @@ namespace ControleFazenda.App.Controllers
                 return Json(new { success = false, errors, isModelState = true });
             }
 
-            IdentityUser? user = await _userManager.GetUserAsync(User);
+            Usuario? user = await _userManager.GetUserAsync(User);
             FluxoCaixa fluxoCaixa;
 
             if (user != null)
@@ -167,7 +167,7 @@ namespace ControleFazenda.App.Controllers
         {
             var fluxoCaixa = await _fluxoCaixaServico.ObterPorId(id);
             if (fluxoCaixa == null) return NotFound();
-            IdentityUser? user = await _userManager.GetUserAsync(User);
+            Usuario? user = await _userManager.GetUserAsync(User);
 
             if (user == null) return NotFound();
 

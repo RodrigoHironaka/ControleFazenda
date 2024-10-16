@@ -17,14 +17,14 @@ namespace ControleFazenda.App.Controllers
         private readonly ICaixaServico _caixaServico;
         private readonly IFormaPagamentoServico _formaPagamentoServico;
         private readonly IMapper _mapper;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<Usuario> _userManager;
         private readonly ContextoPrincipal _context;
         private readonly ILogAlteracaoServico _logAlteracaoServico;
 
         public CaixasController(IMapper mapper,
                                   ICaixaServico caixaServico,
                                   IFormaPagamentoServico formaPagamentoServico,
-                                  UserManager<IdentityUser> userManager,
+                                  UserManager<Usuario> userManager,
                                   ContextoPrincipal context,
                                   ILogAlteracaoServico logAlteracaoServico,
                                   INotificador notificador) : base(notificador)
@@ -93,7 +93,7 @@ namespace ControleFazenda.App.Controllers
         [IgnoreAntiforgeryToken]
         public async Task<IActionResult> AbrirCaixa()
         {
-            IdentityUser? user = await _userManager.GetUserAsync(User);
+            Usuario? user = await _userManager.GetUserAsync(User);
             Caixa caixa = new Caixa();
             if (user != null)
             {
@@ -130,7 +130,7 @@ namespace ControleFazenda.App.Controllers
                 return Json(new { success = false, errors, isModelState = true });
             }
 
-            IdentityUser? user = await _userManager.GetUserAsync(User);
+            Usuario? user = await _userManager.GetUserAsync(User);
 
             if (user != null)
             {

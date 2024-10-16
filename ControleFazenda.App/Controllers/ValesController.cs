@@ -18,14 +18,14 @@ namespace ControleFazenda.App.Controllers
         private readonly IValeServico _valeServico;
         private readonly IColaboradorServico _colaboradorServico;
         private readonly IMapper _mapper;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<Usuario> _userManager;
         private readonly ContextoPrincipal _context;
         private readonly ILogAlteracaoServico _logAlteracaoServico;
 
         public ValesController(IMapper mapper,
                                   IValeServico valeServico,
                                   IColaboradorServico colaboradorServico,
-                                  UserManager<IdentityUser> userManager,
+                                  UserManager<Usuario> userManager,
                                   ContextoPrincipal context,
                                   ILogAlteracaoServico logAlteracaoServico,
                                   INotificador notificador) : base(notificador)
@@ -77,7 +77,7 @@ namespace ControleFazenda.App.Controllers
                 return Json(new { success = false, errors, isModelState = true });
             }
 
-            IdentityUser? user = await _userManager.GetUserAsync(User);
+            Usuario? user = await _userManager.GetUserAsync(User);
             Vale vale;
 
             if (user != null)

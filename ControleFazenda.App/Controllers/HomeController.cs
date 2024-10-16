@@ -1,5 +1,6 @@
 using ControleFazenda.App.Models;
 using ControleFazenda.App.ViewModels;
+using ControleFazenda.Business.Entidades;
 using ControleFazenda.Business.Interfaces.Repositorios;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,9 +14,9 @@ namespace ControleFazenda.App.Controllers
     public class HomeController : Controller
     {
         private readonly ICaixaRepositorio _caixaRepositorio;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<Usuario> _userManager;
 
-        public HomeController(ICaixaRepositorio caixaRepositorio, UserManager<IdentityUser> userManager)
+        public HomeController(ICaixaRepositorio caixaRepositorio, UserManager<Usuario> userManager)
         {
             _caixaRepositorio = caixaRepositorio;
             _userManager = userManager;
@@ -23,7 +24,7 @@ namespace ControleFazenda.App.Controllers
 
         public async Task<IActionResult> Index()
         {
-            IdentityUser? user = await _userManager.GetUserAsync(User);
+            Usuario? user = await _userManager.GetUserAsync(User);
             if (user != null)
             {
                 var caixa = await _caixaRepositorio.ObterCaixaAberto(user.Id);

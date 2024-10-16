@@ -3,6 +3,7 @@ using ControleFazenda.App.ViewModels;
 using ControleFazenda.Business.Entidades;
 using ControleFazenda.Business.Interfaces;
 using ControleFazenda.Business.Interfaces.Servicos;
+using ControleFazenda.Business.Servicos;
 using ControleFazenda.Data.Context;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -15,13 +16,13 @@ namespace ControleFazenda.App.Controllers
     {
         private readonly IFormaPagamentoServico _formaPagamentoServico;
         private readonly IMapper _mapper;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<Usuario> _userManager;
         private readonly ContextoPrincipal _context;
         private readonly ILogAlteracaoServico _logAlteracaoServico;
 
         public FormasPagamentoController(IMapper mapper,
                                   IFormaPagamentoServico formaPagamentoServico,
-                                  UserManager<IdentityUser> userManager,
+                                  UserManager<Usuario> userManager,
                                   ContextoPrincipal context,
                                   ILogAlteracaoServico logAlteracaoServico,
                                   INotificador notificador) : base(notificador)
@@ -36,7 +37,22 @@ namespace ControleFazenda.App.Controllers
         [Route("lista-de-formaspagamento")]
         public async Task<IActionResult> Index()
         {
-            return View(_mapper.Map<IEnumerable<FormaPagamentoVM>>(await _formaPagamentoServico.ObterTodos()));
+            Usuario? user = await _userManager.GetUserAsync(User);
+            var formas = await _formaPagamentoServico.ObterTodos();
+            var formasVM = _mapper.Map<List<FormaPagamentoVM>>(formas);
+            var formasFazenda = new List<FormaPagamentoVM>();
+            if (user != null)
+            {
+                foreach (var item in formasVM)
+                {
+                    Usuario? usuario = await _userManager.FindByIdAsync(item.UsuarioCadastroId.ToString());
+                    if (usuario?.Fazenda == user.Fazenda)
+                        formasFazenda.Add(item);
+                }
+                return View(formasFazenda);
+            }
+            else
+                return View(new List<FormaPagamentoVM>());
         }
 
         [Route("editar-formapagamento/{id}")]
@@ -67,7 +83,7 @@ namespace ControleFazenda.App.Controllers
                 return Json(new { success = false, errors, isModelState = true });
             }
 
-            IdentityUser? user = await _userManager.GetUserAsync(User);
+            Usuario? user = await _userManager.GetUserAsync(User);
             FormaPagamento formaPagamento;
 
             if (user != null)

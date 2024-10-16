@@ -15,13 +15,13 @@ namespace ControleFazenda.App.Controllers
     {
         private readonly IColaboradorServico _colaboradorServico;
         private readonly IMapper _mapper;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<Usuario> _userManager;
         private readonly ContextoPrincipal _context;
         private readonly ILogAlteracaoServico _logAlteracaoServico;
 
         public ColaboradoresController(IMapper mapper,
                                   IColaboradorServico colaboradorServico,
-                                  UserManager<IdentityUser> userManager,
+                                  UserManager<Usuario> userManager,
                                   ContextoPrincipal context,
                                   ILogAlteracaoServico logAlteracaoServico,
                                   INotificador notificador) : base(notificador)
@@ -37,7 +37,22 @@ namespace ControleFazenda.App.Controllers
         [Route("lista-de-colaboradores")]
         public async Task<IActionResult> Index()
         {
-            return View(_mapper.Map<IEnumerable<ColaboradorVM>>(await _colaboradorServico.ObterTodos()));
+            Usuario? user = await _userManager.GetUserAsync(User);
+            var colaboradores = await _colaboradorServico.ObterTodos();
+            var colaboradoresVM = _mapper.Map<List<ColaboradorVM>>(colaboradores);
+            var colabsFazenda = new List<ColaboradorVM>();
+            if (user != null)
+            {
+                foreach (var item in colaboradoresVM)
+                {
+                    Usuario? usuario = await _userManager.FindByIdAsync(item.UsuarioCadastroId.ToString());
+                    if (usuario?.Fazenda == user.Fazenda)
+                        colabsFazenda.Add(item);
+                }
+                return View(colabsFazenda);
+            } 
+            else
+                return View(new List<ColaboradorVM>());
         }
 
         [Route("editar-colaborador/{id}")]
@@ -69,7 +84,7 @@ namespace ControleFazenda.App.Controllers
                 return Json(new { success = false, errors, isModelState = true });
             }
 
-            IdentityUser? user = await _userManager.GetUserAsync(User);
+            Usuario? user = await _userManager.GetUserAsync(User);
             Colaborador colaborador;
 
             if (user != null)
@@ -120,7 +135,7 @@ namespace ControleFazenda.App.Controllers
         {
             var colaborador = await _colaboradorServico.ObterPorId(id);
             if (colaborador == null) return NotFound();
-            IdentityUser? user = await _userManager.GetUserAsync(User);
+            Usuario? user = await _userManager.GetUserAsync(User);
 
             if (user == null) return NotFound();
 

@@ -18,7 +18,7 @@ namespace ControleFazenda.App.Controllers
         private readonly INFeServico _nfeServico;
         private readonly IFornecedorServico _fornecedorServico;
         private readonly IMapper _mapper;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<Usuario> _userManager;
         private readonly ContextoPrincipal _context;
         private readonly ILogAlteracaoServico _logAlteracaoServico;
         private readonly IWebHostEnvironment _webHostEnvironment;
@@ -26,7 +26,7 @@ namespace ControleFazenda.App.Controllers
         public NFeController(IMapper mapper,
                                   INFeServico nfeServico,
                                   IFornecedorServico fornecedorServico,
-                                  UserManager<IdentityUser> userManager,
+                                  UserManager<Usuario> userManager,
                                   ContextoPrincipal context,
                                   ILogAlteracaoServico logAlteracaoServico,
                                   IWebHostEnvironment webHostEnvironment,
@@ -78,7 +78,7 @@ namespace ControleFazenda.App.Controllers
                 return Json(new { success = false, errors, isModelState = true });
             }
 
-            IdentityUser? user = await _userManager.GetUserAsync(User);
+            Usuario? user = await _userManager.GetUserAsync(User);
             NFe nfe;
 
             if (user != null)
