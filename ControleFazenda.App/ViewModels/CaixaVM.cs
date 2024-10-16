@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using ControleFazenda.Business.Entidades;
 
 namespace ControleFazenda.App.ViewModels
 {
@@ -56,6 +57,11 @@ namespace ControleFazenda.App.ViewModels
                 else
                     return 0.ToString("N2");
             }
+        }
+
+        public static implicit operator CaixaVM(Caixa v)
+        {
+            throw new NotImplementedException();
         }
     }
 }

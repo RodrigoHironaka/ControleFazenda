@@ -2,6 +2,7 @@
 using ControleFazenda.Business.Entidades.Enum;
 using ControleFazenda.Business.Interfaces.Repositorios;
 using ControleFazenda.Data.Context;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace ControleFazenda.Data.Repository
 {
     public class CaixaRepositorio : Repositorio<Caixa>, ICaixaRepositorio
     {
-        public CaixaRepositorio(ContextoPrincipal db) : base(db) { }
+        public CaixaRepositorio(ContextoPrincipal db) : base(db) {}
 
         public async Task<Int64> ObterNumeroUltimoCaixa(string idUsuario)
         {
@@ -32,6 +33,12 @@ namespace ControleFazenda.Data.Repository
             return caixa;
         }
 
+        public async Task<List<Caixa>> ObterCaixasAberto()
+        {
+            var caixa = await Db.Caixas.AsNoTracking().Include(x => x.FluxosCaixa).Where(x => x.Situacao == SituacaoCaixa.Aberto).ToListAsync();
+            return caixa;
+        }
+
         public async Task<Caixa> ObterPorIdComFluxosDeCaixa(Guid Id)
         {
             var caixa = await Db.Caixas.AsNoTracking().Include(f => f.FluxosCaixa).ThenInclude(fc => fc.FormaPagamento)
@@ -43,12 +50,17 @@ namespace ControleFazenda.Data.Repository
        
         public async Task<List<Caixa>> ObterCaixasComFluxosDeCaixa(Expression<Func<Caixa, bool>>? predicate = null)
         {
-            // Se não for passado um predicate, retorna todas as caixas
+            // Se não for passado um predicate, retorna todas os caixas
             predicate ??= _ => true;
 
             var caixas = await Db.Caixas.AsNoTracking().Include(f => f.FluxosCaixa).ThenInclude(fc => fc.FormaPagamento).Where(predicate).ToListAsync();
 
             return caixas;
+        }
+
+        public async Task<List<Caixa>> ObterTodosComFluxosDeCaixa()
+        {
+            return await Db.Caixas.AsNoTracking().Include(f => f.FluxosCaixa).ThenInclude(fc => fc.FormaPagamento).ToListAsync();
         }
     }
 }

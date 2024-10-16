@@ -47,24 +47,49 @@ namespace ControleFazenda.App.Controllers
 
             if (usuLogado != null)
             {
-                if(Id != Guid.Empty)
-                    caixa = await _caixaServico.ObterPorIdComFluxosDeCaixa(Id);
-                else
-                    caixa = await _caixaServico.ObterCaixaAberto(usuLogado != null ? usuLogado.Id : string.Empty);
-
-                if (caixa != null)
+                if(Id == Guid.Empty)
                 {
-                    foreach (var item in caixa.FluxosCaixa)
+                    Usuario? user = await _userManager.GetUserAsync(User);
+                    var caixas = await _caixaServico.ObterCaixasAberto();
+                    var caixasVM = _mapper.Map<List<CaixaVM>>(caixas);
+                    if (user != null)
                     {
-                        if (item.FormaPagamento == null)
-                            item.FormaPagamento = await _formaPagamentoServico.ObterPorId(item.FormaPagamentoId);
+                        foreach (var item in caixasVM)
+                        {
+                            Usuario? usuario = await _userManager.FindByIdAsync(item.UsuarioCadastroId.ToString());
+                            if (usuario?.Fazenda == user.Fazenda)
+                            {
+                                foreach (var itemFluxo in item.FluxosCaixa)
+                                {
+                                    if (itemFluxo.FormaPagamento == null)
+                                        itemFluxo.FormaPagamento = _mapper.Map<FormaPagamentoVM>(await _formaPagamentoServico.ObterPorId(itemFluxo.FormaPagamentoId));
+                                }
+                                return View(item);
+                            }
+                        }
+                        
                     }
-                    caixaVM = _mapper.Map<CaixaVM>(caixa);
-                }  
+                    else
+                        return NotFound();
+                        
+                }
+                else
+                {
+                    Usuario? user = await _userManager.GetUserAsync(User);
+                    var caixas = await _caixaServico.ObterTodosComFluxosDeCaixa();
+                    var caixasVM = _mapper.Map<List<CaixaVM>>(caixas);
+                    if (user != null)
+                    {
+                        foreach (var item in caixasVM)
+                        {
+                            Usuario? usuario = await _userManager.FindByIdAsync(item.UsuarioCadastroId.ToString());
+                            if (item.Id == Id && usuario?.Fazenda == user.Fazenda)
+                                return View(item);
+                        }
+                    }
+                }
+               
             }
-            else
-                return NotFound();
-
             return View(caixaVM);
         }
 
@@ -74,18 +99,26 @@ namespace ControleFazenda.App.Controllers
         {
             try
             {
-                var usuLogado = await _userManager.GetUserAsync(User);
-                var caixasVM = new List<CaixaVM>();
-                if (usuLogado != null)
-                    caixasVM = _mapper.Map<List<CaixaVM>>(await _caixaServico.ObterCaixasComFluxosDeCaixa(x => x.UsuarioCadastroId == Guid.Parse(usuLogado.Id)));
+                var user = await _userManager.GetUserAsync(User);
+                var caixas = await _caixaServico.ObterTodosComFluxosDeCaixa();
+                var caixasVM = _mapper.Map<List<CaixaVM>>(caixas);
+                var caixasFazendaVM = new List<CaixaVM>();
+                if (user != null)
+                {
+                    foreach (var item in caixasVM)
+                    {
+                        Usuario? usuario = await _userManager.FindByIdAsync(item.UsuarioCadastroId.ToString());
+                        if (usuario?.Fazenda == user.Fazenda)
+                            caixasFazendaVM.Add(item);
+                    }
+                }
 
-                return PartialView("_Pesquisa", caixasVM.OrderByDescending(x => x.Numero));
+                return PartialView("_Pesquisa", caixasFazendaVM.OrderByDescending(x => x.Numero));
             }
             catch (Exception ex)
             {
                 return Json(new { success = false, errors = ex.Message });
             }
-
         }
 
         [HttpPost]
@@ -100,8 +133,6 @@ namespace ControleFazenda.App.Controllers
                 using var transaction = await _context.Database.BeginTransactionAsync();
                 try
                 {
-                    var caixaVM = new CaixaVM();
-                    caixa = _mapper.Map<Caixa>(caixaVM);
                     caixa.Numero = await _caixaServico.ObteNumeroUltimoCaixa(user.Id.ToString()) + 1;
                     caixa.UsuarioCadastroId = Guid.Parse(user.Id);
                     await _caixaServico.Adicionar(caixa);
@@ -115,7 +146,7 @@ namespace ControleFazenda.App.Controllers
                 }
             }
 
-            return Json(new { success = true });
+            return Json(new { success = true, idCaixa = caixa.Id });
         }
 
         [HttpPost]
@@ -131,13 +162,24 @@ namespace ControleFazenda.App.Controllers
             }
 
             Usuario? user = await _userManager.GetUserAsync(User);
+            var caixa = new Caixa();
 
             if (user != null)
             {
                 using var transaction = await _context.Database.BeginTransactionAsync();
                 try
                 {
-                    var caixa = await _caixaServico.ObterCaixaAberto(user.Id);
+                    var caixas = await _caixaServico.ObterCaixasAberto();
+                    
+                    if (user != null)
+                    {
+                        foreach (var item in caixas)
+                        {
+                            Usuario? usuario = await _userManager.FindByIdAsync(item.UsuarioCadastroId.ToString());
+                            if (usuario?.Fazenda == user.Fazenda)
+                                caixa = item; break;
+                        }
+                    }
 
                     if (caixa != null)
                     {
@@ -161,7 +203,7 @@ namespace ControleFazenda.App.Controllers
                 }
             }
 
-            return Json(new { success = true });
+            return Json(new { success = true, idCaixa = caixa.Id.ToString() });
         }
     }
 }

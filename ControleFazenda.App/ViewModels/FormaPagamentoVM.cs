@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using ControleFazenda.Business.Entidades;
 
 namespace ControleFazenda.App.ViewModels
 {
@@ -46,6 +47,11 @@ namespace ControleFazenda.App.ViewModels
             {
                 return $"Alteração: {UsuarioAlteracao?.UserName} - {DataAlteracao}";
             }
+        }
+
+        public static implicit operator FormaPagamentoVM(FormaPagamento v)
+        {
+            throw new NotImplementedException();
         }
     }
 }

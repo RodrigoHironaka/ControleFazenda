@@ -130,7 +130,7 @@
                             confirmButtonText: "OK",
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                window.location.href = '/lista-de-caixas';
+                                window.location.href = '/lista-de-caixas?Id=' + response.idCaixa
                             }
                         });
                     }
@@ -162,7 +162,6 @@
                 confirmButtonText: "Sim!"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    console.log("if confirmacao");
                     $.ajax({
                         url: '@Url.Action("FecharCaixa", "Caixas")',
                         type: 'POST',
