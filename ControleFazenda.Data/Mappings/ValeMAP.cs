@@ -19,7 +19,7 @@ namespace ControleFazenda.Data.Mappings
             builder.Property(x => x.AutorizadoPor).HasColumnType("varchar(100)").IsRequired();
             builder.Property(x => x.Situacao).HasConversion<Int32>();
             builder.HasOne(x => x.Colaborador).WithMany(x => x.Vales).HasForeignKey(x => x.ColaboradorId);
-
+            builder.Property(x => x.Fazenda).HasConversion<Int32>();
 
             builder.ToTable("Vales");
         }

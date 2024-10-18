@@ -19,6 +19,7 @@ namespace ControleFazenda.Data.Mappings
             builder.Property(x => x.UsuarioCadastroId);
             builder.Property(x => x.UsuarioAlteracaoId);
             builder.Property(x => x.Situacao).HasConversion<Int32>();
+            builder.Property(x => x.Fazenda).HasConversion<Int32>();
             builder.HasMany(x => x.FluxosCaixa).WithOne(x => x.Caixa).HasForeignKey(x => x.CaixaId);
 
             builder.ToTable("Caixas");

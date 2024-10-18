@@ -18,6 +18,7 @@ namespace ControleFazenda.Data.Mappings
             builder.Property(x => x.UsuarioCadastroId);
             builder.Property(x => x.Chave).IsRequired().HasColumnType("varchar(200)");
             builder.Property(x => x.Historico).IsRequired().HasColumnType("varchar(8000)");
+            builder.Property(x => x.Fazenda).HasConversion<Int32>();
             builder.ToTable("LogsAlteracao");
         }
     }

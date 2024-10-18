@@ -111,6 +111,7 @@ namespace ControleFazenda.App.Controllers
                     {
                         fornecedor = _mapper.Map<Fornecedor>(fornecedorVM);
                         fornecedor.UsuarioCadastroId = Guid.Parse(user.Id);
+                        fornecedor.Fazenda = user.Fazenda;
                         await _fornecedorServico.Adicionar(fornecedor);
                     }
 

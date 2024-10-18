@@ -109,6 +109,7 @@ namespace ControleFazenda.App.Controllers
                     {
                         colaborador = _mapper.Map<Colaborador>(colaboradorVM);
                         colaborador.UsuarioCadastroId = Guid.Parse(user.Id);
+                        colaborador.Fazenda = user.Fazenda;
                         await _colaboradorServico.Adicionar(colaborador);
                     }
 

@@ -17,6 +17,7 @@ namespace ControleFazenda.Data.Mappings
             builder.Property(x => x.PeriodoParcelamento);
             builder.Property(x => x.Nome).IsRequired().HasColumnType("varchar(200)");
             builder.Property(x => x.Situacao).HasConversion<Int32>();
+            builder.Property(x => x.Fazenda).HasConversion<Int32>();
             builder.HasMany(x => x.FluxosCaixa).WithOne(x => x.FormaPagamento).HasForeignKey(x => x.FormaPagamentoId);
             builder.ToTable("FormasPagamento");
         }

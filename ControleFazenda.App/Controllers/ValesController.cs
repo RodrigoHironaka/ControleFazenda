@@ -122,6 +122,7 @@ namespace ControleFazenda.App.Controllers
                         vale = _mapper.Map<Vale>(valeVM);
                         vale.UsuarioCadastroId = Guid.Parse(user.Id);
                         vale.Numero = await _valeServico.ObterNumeroUltimoVale() + 1;
+                        vale.Fazenda = user.Fazenda;
                         if (vale.Situacao == Situacao.Inativo)
                             vale.Valor *= -1;
                         await _valeServico.Adicionar(vale);
@@ -206,7 +207,8 @@ namespace ControleFazenda.App.Controllers
 
         private async Task<ValeVM> PopularColaboradores(ValeVM vale)
         {
-            var colaboradores = await _colaboradorServico.Buscar(x => x.Situacao == Situacao.Ativo);
+            Usuario? user = await _userManager.GetUserAsync(User);
+            var colaboradores = await _colaboradorServico.Buscar(x => x.Situacao == Situacao.Ativo && x.Fazenda == user.Fazenda);
             var colaboradoresVM = _mapper.Map<IEnumerable<ColaboradorVM>>(colaboradores);
             colaboradoresVM = colaboradoresVM.OrderBy(x => x.RazaoSocial);
             vale.Colaboradores = colaboradoresVM;

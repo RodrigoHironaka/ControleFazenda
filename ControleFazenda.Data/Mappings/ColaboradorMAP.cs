@@ -25,8 +25,8 @@ namespace ControleFazenda.Data.Mappings
             builder.Property(x => x.TipoPessoa).HasConversion<Int32>();
             builder.Property(x => x.Admissao);
             builder.Property(x => x.Demissao);
-            builder.Property(x => x.Situacao).HasConversion<Int32>();
-
+            builder.Property(x => x.Situacao).HasConversion<Int32>(); 
+            builder.Property(x => x.Fazenda).HasConversion<Int32>();
             builder.OwnsOne(x => x.Endereco, endereco =>
             {
                 endereco.Property(e => e.Logradouro).HasMaxLength(100).HasColumnName("Logradouro");

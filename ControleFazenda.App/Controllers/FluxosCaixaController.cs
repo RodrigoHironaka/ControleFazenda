@@ -131,6 +131,7 @@ namespace ControleFazenda.App.Controllers
                             fluxoCaixa = _mapper.Map<FluxoCaixa>(fluxoCaixaVM);
                             fluxoCaixa.UsuarioCadastroId = Guid.Parse(user.Id);
                             fluxoCaixa.CaixaId = caixa.Id;
+                            fluxoCaixa.Fazenda = user.Fazenda;
                             if (fluxoCaixa.DebitoCredito == DebitoCredito.Debito)
                                 fluxoCaixa.Valor = fluxoCaixa.Valor * -1;
                             await _fluxoCaixaServico.Adicionar(fluxoCaixa);

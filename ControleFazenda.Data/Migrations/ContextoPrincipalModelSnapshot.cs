@@ -34,6 +34,9 @@ namespace ControleFazenda.Data.Migrations
                     b.Property<DateTime>("DataCadastro")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Fazenda")
+                        .HasColumnType("int");
+
                     b.Property<long>("Numero")
                         .HasColumnType("bigint");
 
@@ -83,6 +86,9 @@ namespace ControleFazenda.Data.Migrations
 
                     b.Property<string>("Email")
                         .HasColumnType("varchar(100)");
+
+                    b.Property<int>("Fazenda")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("Nascimento")
                         .HasColumnType("datetime2");
@@ -139,6 +145,9 @@ namespace ControleFazenda.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(200)");
 
+                    b.Property<int>("Fazenda")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("FormaPagamentoId")
                         .HasColumnType("uniqueidentifier");
 
@@ -172,6 +181,9 @@ namespace ControleFazenda.Data.Migrations
 
                     b.Property<DateTime>("DataCadastro")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Fazenda")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -224,6 +236,9 @@ namespace ControleFazenda.Data.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("varchar(100)");
 
+                    b.Property<int>("Fazenda")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("Nascimento")
                         .HasColumnType("datetime2");
 
@@ -270,6 +285,9 @@ namespace ControleFazenda.Data.Migrations
                     b.Property<DateTime>("DataCadastro")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Fazenda")
+                        .HasColumnType("int");
+
                     b.Property<string>("Historico")
                         .IsRequired()
                         .HasColumnType("varchar(8000)");
@@ -302,6 +320,9 @@ namespace ControleFazenda.Data.Migrations
 
                     b.Property<DateTime?>("Emissao")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Fazenda")
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("FornecedorId")
                         .HasColumnType("uniqueidentifier");
@@ -355,6 +376,9 @@ namespace ControleFazenda.Data.Migrations
 
                     b.Property<DateTime>("DataCadastro")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Fazenda")
+                        .HasColumnType("int");
 
                     b.Property<string>("Numero")
                         .IsRequired()
@@ -475,6 +499,9 @@ namespace ControleFazenda.Data.Migrations
 
                     b.Property<DateTime>("DataCadastro")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Fazenda")
+                        .HasColumnType("int");
 
                     b.Property<long>("Numero")
                         .HasColumnType("bigint");

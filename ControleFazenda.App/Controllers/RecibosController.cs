@@ -100,7 +100,7 @@ namespace ControleFazenda.App.Controllers
                 return Json(new { success = false, errors, isModelState = true });
             }
 
-            IdentityUser? user = await _userManager.GetUserAsync(User);
+            Usuario? user = await _userManager.GetUserAsync(User);
             Recibo recibo;
 
             if (user != null)
@@ -124,6 +124,7 @@ namespace ControleFazenda.App.Controllers
                         recibo = _mapper.Map<Recibo>(reciboVM);
                         recibo.UsuarioCadastroId = Guid.Parse(user.Id);
                         recibo.Numero = await _reciboServico.ObterNumeroUltimoRecibo() + 1;
+                        recibo.Fazenda = user.Fazenda;
                         await _reciboServico.Adicionar(recibo);
                     }
 
@@ -177,7 +178,8 @@ namespace ControleFazenda.App.Controllers
 
         private async Task<ReciboVM> PopularColaboradores(ReciboVM recibo)
         {
-            var colaboradores = await _colaboradorServico.Buscar(x => x.Situacao == Situacao.Ativo);
+            Usuario? user = await _userManager.GetUserAsync(User);
+            var colaboradores = await _colaboradorServico.Buscar(x => x.Situacao == Situacao.Ativo && x.Fazenda == user.Fazenda);
             var colaboradoresVM = _mapper.Map<IEnumerable<ColaboradorVM>>(colaboradores);
             colaboradoresVM = colaboradoresVM.OrderBy(x => x.RazaoSocial);
             recibo.Colaboradores = colaboradoresVM;
@@ -293,5 +295,15 @@ namespace ControleFazenda.App.Controllers
                
             }
         }
+
+        //public SelectList CarregaColaboradores(int? colaboradorId = null)
+        //{
+        //    var user = _userManager.GetUserAsync(User);
+        //    var colaboradores = _context.Colaboradores
+        //        .Where(x=> x.Fazenda == user.Result.Fazenda)
+        //                                .OrderBy(c => c.RazaoSocial)  // Ordenar pelo nome se necessário
+        //                                .ToList();
+        //    return new SelectList(colaboradores, "Id", "RazaoSocial", colaboradorId);
+        //}
     }
 }

@@ -110,6 +110,7 @@ namespace ControleFazenda.App.Controllers
                     {
                         formaPagamento = _mapper.Map<FormaPagamento>(formaPagamentoVM);
                         formaPagamento.UsuarioCadastroId = Guid.Parse(user.Id);
+                        formaPagamento.Fazenda = user.Fazenda;
                         await _formaPagamentoServico.Adicionar(formaPagamento);
                     }
 

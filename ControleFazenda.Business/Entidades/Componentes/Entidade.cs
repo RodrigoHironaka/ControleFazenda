@@ -1,4 +1,6 @@
-﻿namespace ControleFazenda.Business.Entidades.Componentes
+﻿using ControleFazenda.Business.Entidades.Enum;
+
+namespace ControleFazenda.Business.Entidades.Componentes
 {
     public abstract class Entidade
     {
@@ -13,6 +15,7 @@
 
         public Guid UsuarioCadastroId { get; set; }
         public Guid UsuarioAlteracaoId { get; set; }
+        public Fazenda Fazenda { get; set; }
 
     }
 }

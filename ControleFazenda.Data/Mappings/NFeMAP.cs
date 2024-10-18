@@ -25,7 +25,7 @@ namespace ControleFazenda.Data.Mappings
             builder.Property(x => x.RecebimentoNFe);
             builder.Property(x => x.TipoNFe).HasConversion<Int32>();
             builder.HasOne(x => x.Fornecedor).WithMany(x => x.NFes).HasForeignKey(x => x.FornecedorId);
-
+            builder.Property(x => x.Fazenda).HasConversion<Int32>();
 
             builder.ToTable("NFes");
         }

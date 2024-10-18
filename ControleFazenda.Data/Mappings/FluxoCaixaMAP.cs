@@ -17,6 +17,7 @@ namespace ControleFazenda.Data.Mappings
             builder.Property(x => x.Valor).HasPrecision(10, 5);
             builder.Property(x => x.Data);
             builder.Property(x => x.DebitoCredito).HasConversion<Int32>();
+            builder.Property(x => x.Fazenda).HasConversion<Int32>();
             builder.HasOne(x => x.FormaPagamento).WithMany(x => x.FluxosCaixa).HasForeignKey(x => x.FormaPagamentoId);
             builder.HasOne(x => x.Caixa).WithMany(x => x.FluxosCaixa).HasForeignKey(x => x.CaixaId);
             builder.ToTable("FluxosCaixa");

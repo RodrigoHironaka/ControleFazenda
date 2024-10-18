@@ -139,6 +139,7 @@ namespace ControleFazenda.App.Controllers
                     {
                         nfe = _mapper.Map<NFe>(nfeVM);
                         nfe.UsuarioCadastroId = Guid.Parse(user.Id);
+                        nfe.Fazenda = user.Fazenda;
                         await _nfeServico.Adicionar(nfe);
                         var prefixo = nfe.Id + "_";
                         await UploadArquivo(nfeVM.Arquivo, prefixo);
@@ -211,7 +212,8 @@ namespace ControleFazenda.App.Controllers
 
         private async Task<NFeVM> PopularFornecedores(NFeVM nfe)
         {
-            var fornecedores = await _fornecedorServico.Buscar(x => x.Situacao == Situacao.Ativo);
+            Usuario? user = await _userManager.GetUserAsync(User);
+            var fornecedores = await _fornecedorServico.Buscar(x => x.Situacao == Situacao.Ativo && x.Fazenda == user.Fazenda);
             var fornecedoresVM = _mapper.Map<IEnumerable<FornecedorVM>>(fornecedores);
             fornecedoresVM = fornecedoresVM.OrderBy(x => x.RazaoSocial);
             nfe.Fornecedores = fornecedoresVM;

@@ -62,7 +62,8 @@ namespace ControleFazenda.Data.Migrations
                     DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UsuarioCadastroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Fazenda = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -81,6 +82,7 @@ namespace ControleFazenda.Data.Migrations
                     DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UsuarioCadastroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Fazenda = table.Column<int>(type: "int", nullable: false),
                     RazaoSocial = table.Column<string>(type: "varchar(200)", nullable: false),
                     NomeFantasia = table.Column<string>(type: "varchar(200)", nullable: true),
                     Nascimento = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -114,7 +116,8 @@ namespace ControleFazenda.Data.Migrations
                     DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UsuarioCadastroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Fazenda = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -131,6 +134,7 @@ namespace ControleFazenda.Data.Migrations
                     DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UsuarioCadastroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Fazenda = table.Column<int>(type: "int", nullable: false),
                     RazaoSocial = table.Column<string>(type: "varchar(200)", nullable: false),
                     NomeFantasia = table.Column<string>(type: "varchar(200)", nullable: true),
                     Nascimento = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -162,7 +166,8 @@ namespace ControleFazenda.Data.Migrations
                     DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UsuarioCadastroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Fazenda = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -291,7 +296,8 @@ namespace ControleFazenda.Data.Migrations
                     DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UsuarioCadastroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Fazenda = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -317,7 +323,8 @@ namespace ControleFazenda.Data.Migrations
                     DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UsuarioCadastroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Fazenda = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -343,7 +350,8 @@ namespace ControleFazenda.Data.Migrations
                     DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UsuarioCadastroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Fazenda = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -375,7 +383,8 @@ namespace ControleFazenda.Data.Migrations
                     DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UsuarioCadastroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Fazenda = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
