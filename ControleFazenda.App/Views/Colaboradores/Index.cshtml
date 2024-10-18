@@ -4,7 +4,7 @@
     ViewData["Title"] = "Lista de Colaboradores";
 }
 
-<h1>@ViewData["Title"]?.ToString()?.ToUpper()</h1>
+<h6>@ViewData["Title"]?.ToString()?.ToUpper()</h6>
 
 <p>
     <a asp-action="Editar" asp-route-id="@Guid.Empty" class="w-100 btn btn-success"><i class="badge-info bi-plus-lg"></i> Novo</a>

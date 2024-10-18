@@ -6,10 +6,10 @@
 
 <div class="row">
     <div class="col-md-6">
-        <h1>@ViewData["Title"]?.ToString()?.ToUpper()</h1>
+        <h6>@ViewData["Title"]?.ToString()?.ToUpper()</h6>
     </div>
     <div class="col-md-6">
-        <h1 class="text-end">@Model.Sum(x=> x.Valor).ToString("C2")</h1>
+        <h6 class="text-end">@Model.Sum(x=> x.Valor).ToString("C2")</h6>
     </div>
 </div>
 
