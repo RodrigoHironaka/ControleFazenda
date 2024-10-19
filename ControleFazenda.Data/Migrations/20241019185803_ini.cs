@@ -175,6 +175,26 @@ namespace ControleFazenda.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Malote",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Numero = table.Column<int>(type: "int", nullable: false),
+                    QuemLevou = table.Column<string>(type: "varchar(200)", nullable: true),
+                    Enviado = table.Column<bool>(type: "bit", nullable: false),
+                    Descricao = table.Column<string>(type: "varchar(8000)", nullable: false),
+                    DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UsuarioCadastroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Fazenda = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Malote", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -484,6 +504,9 @@ namespace ControleFazenda.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "LogsAlteracao");
+
+            migrationBuilder.DropTable(
+                name: "Malote");
 
             migrationBuilder.DropTable(
                 name: "NFes");

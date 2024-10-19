@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControleFazenda.Data.Migrations
 {
     [DbContext(typeof(ContextoPrincipal))]
-    [Migration("20241019115335_ini2")]
-    partial class ini2
+    [Migration("20241019185803_ini")]
+    partial class ini
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
