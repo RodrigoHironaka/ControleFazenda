@@ -1,25 +1,27 @@
-﻿using ControleFazenda.Business.Entidades.Enum;
-using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel;
-using ControleFazenda.Business.Entidades;
+using System.ComponentModel.DataAnnotations;
 
 namespace ControleFazenda.App.ViewModels
 {
-    public class FormaPagamentoVM
+    public class MaloteVM
     {
         [Key]
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        [StringLength(200, ErrorMessage = "O campo {0} precisa ter entre {2} e {1} caracteres", MinimumLength = 2)]
-        public string? Nome { get; set; }
-        public Int32 QtdParcelamento { get; set; }
-        public Int32 PeriodoParcelamento { get; set; }
+        [DisplayName("Descrição")]
+        public string? Descricao { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        [DisplayName("Situação")]
-        public Situacao Situacao { get; set; } = Situacao.Ativo;
+        [DisplayName("Número")]
+        public Int32 Numero { get; set; }
+
+        [DisplayName("Quem levou?")]
+        public string? QuemLevou { get; set; }
+
+        [DisplayName("Enviado?")]
+        public bool Enviado { get; set; } = false;
 
         [ScaffoldColumn(false)]
         public DateTime DataCadastro { get; set; }
@@ -49,7 +51,5 @@ namespace ControleFazenda.App.ViewModels
             }
         }
 
-        
     }
 }
-

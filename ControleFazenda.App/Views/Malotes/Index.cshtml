@@ -1,0 +1,71 @@
+﻿@model IEnumerable<ControleFazenda.App.ViewModels.MaloteVM>
+
+@{
+    ViewData["Title"] = "Lista de Malotes";
+}
+
+<h6>@ViewData["Title"]?.ToString()?.ToUpper()</h6>
+
+<p>
+    <button class=" w-100 btn btn-success novo" data-id="@Guid.Empty"><i class="bi bi-plus-lg"></i> Novo</button>
+</p>
+<table class="table table-bordered table-striped table-hover small tabela">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Numero)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Enviado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descricao)
+            </th>
+            <th>Opções</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Numero)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Enviado)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descricao)
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-primary modal-trigger editar" data-id="@item.Id"><i class="bi bi-pencil-square"></i></button>
+                    <button class="btn btn-sm btn-danger modal-trigger excluir" data-id="@item.Id"><i class="bi bi-trash-fill"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div id="modal" class="modal fade" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false"></div>
+
+@section Scripts
+{
+    <script>
+        function chamarExcluir(id) {
+            var url = 'excluir-malote/' + id;
+            Excluir(id, url)
+        }
+
+        $(document).ready(function () {
+            abrirModal(".novo", "NOVO REGISTRO", "/editar-malote/");
+            abrirModal(".editar", "EDITAR REGISTRO", "/editar-malote/");
+
+            $('.excluir').click(function () {
+                var itemId = $(this).data('id');
+                chamarExcluir(itemId);
+            });
+        });
+
+        InitializeDataTable('.tabela');
+    </script>
+}
+
