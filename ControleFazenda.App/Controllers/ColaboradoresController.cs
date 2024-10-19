@@ -118,7 +118,6 @@ namespace ControleFazenda.App.Controllers
                         await transaction.RollbackAsync();
                         List<string> errors = new List<string>();
                         errors = _notificador.ObterNotificacoes().Select(x => x.Mensagem).ToList();
-                        //errors.Add(ObterNotificacoes.ExecutarValidacao(new ColaboradorValidation(), colaborador));
                         return Json(new { success = false, errors });
                     }
                     await transaction.CommitAsync();

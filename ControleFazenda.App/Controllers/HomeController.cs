@@ -31,6 +31,8 @@ namespace ControleFazenda.App.Controllers
                 if (caixa == null)
                     ViewData["Mensagem"] = "Nenhum caixa aberto!";
 
+                var usuLogado = await _userManager.GetUserAsync(User);
+                ViewBag.AcessoTotal = usuLogado?.AcessoTotal;
             }
             return View();
         }
