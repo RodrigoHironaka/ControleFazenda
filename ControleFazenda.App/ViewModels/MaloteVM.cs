@@ -19,6 +19,7 @@ namespace ControleFazenda.App.ViewModels
 
         [DisplayName("Quem levou?")]
         public string? QuemLevou { get; set; }
+        public DateTime? Data { get; set; }
 
         [DisplayName("Enviado?")]
         public bool Enviado { get; set; } = false;

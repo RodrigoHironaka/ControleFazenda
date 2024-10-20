@@ -14,5 +14,6 @@ namespace ControleFazenda.Business.Entidades
         public string? QuemLevou { get; set; }
         public bool Enviado { get; set; }
         public string? Descricao { get; set; }
+        public DateTime? Data { get; set; }
     }
 }
