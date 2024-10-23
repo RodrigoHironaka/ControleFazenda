@@ -226,9 +226,12 @@ function InitializeDataTable(selector, options = {}) {
         responsive: true,
         rowReorder: {
             selector: 'td:nth-child(2)'
-        }
+        },
+        //select: {
+        //    style: 'multi'
+        //}
         //layout: {
-              //SIMPLIFICADO
+        //SIMPLIFICADO
         //    topStart: {
         //        buttons: [ 'print', 'copy', 'excel', 'pdf', 'colvis']
         //    }
@@ -317,7 +320,7 @@ function abrirArquivoPorId(id) {
         url: url,
         type: 'GET',
         success: function (response) {
-            
+
         },
         error: function (xhr) {
             Swal.fire({

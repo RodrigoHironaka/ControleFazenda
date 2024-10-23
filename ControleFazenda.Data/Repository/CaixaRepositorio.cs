@@ -2,14 +2,8 @@
 using ControleFazenda.Business.Entidades.Enum;
 using ControleFazenda.Business.Interfaces.Repositorios;
 using ControleFazenda.Data.Context;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ControleFazenda.Data.Repository
 {

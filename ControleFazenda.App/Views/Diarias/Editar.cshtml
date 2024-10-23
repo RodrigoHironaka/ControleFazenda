@@ -1,0 +1,113 @@
+﻿@using ControleFazenda.Business.Entidades.Enum
+@model ControleFazenda.App.ViewModels.DiariaVM
+
+
+@{
+    ViewData["Title"] = "Editar";
+}
+
+<div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="javascript:window.location.reload()"></button>
+        </div>
+        <div class="modal-body">
+            <form asp-action="Editar" id="frm">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="UsuarioCadastroId" />
+                <input type="hidden" asp-for="UsuarioAlteracaoId" />
+                <input type="hidden" asp-for="Colaborador" />
+                <input type="hidden" asp-for="Colaboradores" />
+                <div class="form-group">
+                    <label asp-for="ColaboradorId" class="control-label"></label>
+                    <select asp-for="ColaboradorId" class="form-select" asp-items="@(new SelectList(Model.Colaboradores, "Id", "RazaoSocial", Model.ColaboradorId))"></select>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label asp-for="Data" class="control-label"></label>
+                        <input asp-for="Data" class="form-control" type="date" />
+                        <span asp-validation-for="Data" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="Valor" class="control-label"></label>
+                        <input asp-for="Valor" class="form-control" />
+                        <span asp-validation-for="Valor" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="QuantosDias" class="control-label"></label>
+                        <input asp-for="QuantosDias" class="form-control" min="1"/>
+                        <span asp-validation-for="QuantosDias" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="SituacaoPagamento" class="control-label"></label>
+                        <select class="form-select" asp-for="SituacaoPagamento" asp-items="Html.GetEnumSelectList<SituacaoPagamento>()"></select>
+                        <span asp-validation-for="SituacaoPagamento" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label asp-for="EntradaManha" class="control-label"></label>
+                        <input asp-for="EntradaManha" class="form-control" type="time" />
+                        <span asp-validation-for="EntradaManha" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="SaidaManha" class="control-label"></label>
+                        <input asp-for="SaidaManha" class="form-control" type="time" />
+                        <span asp-validation-for="SaidaManha" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="EntradaTarde" class="control-label"></label>
+                        <input asp-for="EntradaTarde" class="form-control" type="time" />
+                        <span asp-validation-for="EntradaTarde" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="SaidaTarde" class="control-label"></label>
+                        <input asp-for="SaidaTarde" class="form-control" type="time" />
+                        <span asp-validation-for="SaidaTarde" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Observacao" class="control-label"></label>
+                    <textarea asp-for="Observacao" class="form-control" rows="2"></textarea>
+                    <span asp-validation-for="Observacao" class="text-danger"></span>
+                </div>
+                
+               @*  @if (Model.UsuarioCadastroId != Guid.Empty)
+                {
+                    <div class="form-group">
+                        <br />
+                        <input asp-for="_InfoCadastro" class="form-control" readonly style="font-size:10px;"></input>
+                    </div>
+                }
+                @if (Model.UsuarioAlteracaoId != Guid.Empty)
+                {
+                    <div class="form-group">
+                        <input asp-for="_InfoAlteracao" class="form-control" readonly style="font-size:10px;"></input>
+                    </div>
+                } *@
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" onclick="javascript:window.location.reload()">Fechar</button>
+                    <button type="button" onclick="chamarSalvar()" class="btn btn-success">Salvar Registro</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function chamarSalvar() {
+            var id = $("#Id").val();
+            var url = 'editar-diaria/' + id;
+            SalvarQuandoModal('frm', url)
+        }
+    </script>
+}
+

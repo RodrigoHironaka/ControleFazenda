@@ -1,11 +1,16 @@
 ﻿using AutoMapper;
+using ControleFazenda.App.Extensions;
 using ControleFazenda.App.ViewModels;
 using ControleFazenda.Business.Entidades;
 using ControleFazenda.Business.Interfaces;
 using ControleFazenda.Business.Interfaces.Servicos;
+using ControleFazenda.Business.Servicos;
 using ControleFazenda.Data.Context;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 
 namespace ControleFazenda.App.Controllers
 {
@@ -157,6 +162,63 @@ namespace ControleFazenda.App.Controllers
             if (!OperacaoValida()) return View(malote);
 
             return RedirectToAction("Index");
+        }
+
+        [Route("imprimir-descricao/{id:guid}")]
+        [IgnoreAntiforgeryToken]
+        public async Task<IActionResult> ImprimirDescricao(Guid id)
+        {
+            var malote = await _maloteServico.ObterPorId(id);
+            var user = await _userManager.GetUserAsync(User);
+            using (var memoryStream = new MemoryStream())
+            {
+                // Cria o documento PDF
+                var document = new Document(PageSize.A4, 50, 50, 25, 25);
+                var writer = PdfWriter.GetInstance(document, memoryStream);
+                document.Open();
+
+                // Adiciona título ao PDF
+                var table = new PdfPTable(1);
+                table.WidthPercentage = 100;
+                table.SpacingBefore = 20;
+                table.SpacingAfter = 20;
+
+                // Define fontes para os textos
+                var titleFont = FontFactory.GetFont("Arial", 18, Font.BOLD);
+                var estiloPadrao = FontFactory.GetFont("Arial", 12, Font.NORMAL);
+
+                // Adiciona o título à tabela, ocupando 2 colunas
+                var titleCell = new PdfPCell(new Phrase("Malote", titleFont))
+                {
+                    Colspan = 4, // A célula ocupa as 2 colunas da tabela
+                    HorizontalAlignment = Element.ALIGN_CENTER, // Centraliza o texto
+                    BorderWidth = 1f, // Adiciona borda à célula
+                    Padding = 10f, // Adiciona espaço dentro da célula
+                };
+                table.AddCell(titleCell);
+
+                // Adiciona as células à tabela
+                table.AddCell(new PdfPCell(new Phrase(malote.Descricao, estiloPadrao)) { BorderWidth = 1f });
+
+                // Adiciona a tabela ao documento
+                document.Add(table);
+
+                // Fecha o documento
+                document.Close();
+
+                // Retorna o PDF para exibição inline no navegador
+                var pdfBytes = memoryStream.ToArray();
+                var contentDisposition = new ContentDispositionHeaderValue("inline")
+                {
+                    FileName = "Malote.pdf"
+                };
+
+                Response.Headers[HeaderNames.ContentDisposition] = contentDisposition.ToString();
+                Response.ContentType = "application/pdf";
+
+                return new FileContentResult(pdfBytes, "application/pdf");
+
+            }
         }
     }
 }

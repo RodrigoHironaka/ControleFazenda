@@ -20,6 +20,7 @@ namespace ControleFazenda.App.AutoMapper
             CreateMap<NFe, NFeVM>().ReverseMap();
             CreateMap<Vale, ValeVM>().ReverseMap();
             CreateMap<Malote, MaloteVM>().ReverseMap();
+            CreateMap<Diaria, DiariaVM>().ReverseMap();
         }
     }
 }

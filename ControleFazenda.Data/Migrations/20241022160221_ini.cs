@@ -183,6 +183,7 @@ namespace ControleFazenda.Data.Migrations
                     QuemLevou = table.Column<string>(type: "varchar(200)", nullable: true),
                     Enviado = table.Column<bool>(type: "bit", nullable: false),
                     Descricao = table.Column<string>(type: "varchar(8000)", nullable: false),
+                    Data = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UsuarioCadastroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -298,6 +299,38 @@ namespace ControleFazenda.Data.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Diarias",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TipoPeriodo = table.Column<int>(type: "int", nullable: false),
+                    Data = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EntradaManha = table.Column<TimeSpan>(type: "time", nullable: false),
+                    SaidaManha = table.Column<TimeSpan>(type: "time", nullable: false),
+                    EntradaTarde = table.Column<TimeSpan>(type: "time", nullable: false),
+                    SaidaTarde = table.Column<TimeSpan>(type: "time", nullable: false),
+                    HorasTabalhadas = table.Column<int>(type: "int", nullable: false),
+                    Observacao = table.Column<string>(type: "varchar(8000)", nullable: true),
+                    Valor = table.Column<decimal>(type: "decimal(10,5)", precision: 10, scale: 5, nullable: true),
+                    SituacaoPagamento = table.Column<int>(type: "int", nullable: false),
+                    ColaboradorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UsuarioCadastroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Fazenda = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Diarias", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Diarias_Colaboradores_ColaboradorId",
+                        column: x => x.ColaboradorId,
+                        principalTable: "Colaboradores",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -456,6 +489,11 @@ namespace ControleFazenda.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Diarias_ColaboradorId",
+                table: "Diarias",
+                column: "ColaboradorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FluxosCaixa_CaixaId",
                 table: "FluxosCaixa",
                 column: "CaixaId");
@@ -498,6 +536,9 @@ namespace ControleFazenda.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Diarias");
 
             migrationBuilder.DropTable(
                 name: "FluxosCaixa");

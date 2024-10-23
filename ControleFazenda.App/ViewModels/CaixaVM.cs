@@ -58,11 +58,6 @@ namespace ControleFazenda.App.ViewModels
                     return 0.ToString("N2");
             }
         }
-
-        public static implicit operator CaixaVM(Caixa v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
 

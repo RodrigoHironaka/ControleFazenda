@@ -266,7 +266,7 @@ namespace ControleFazenda.App.Controllers
 
                 table.AddCell(new PdfPCell(new Phrase(reciboVM.Colaborador?.DocumentoFormatado, estiloPadrao)) { BorderWidth = 1f, Colspan = 2, HorizontalAlignment = Element.ALIGN_CENTER });
                 table.AddCell(new PdfPCell(new Phrase("Ass.", estiloPadrao)) { BorderWidth = 1f, Colspan = 2 });
-                
+
                 // Adiciona a tabela ao documento
                 document.Add(table);
 
@@ -292,18 +292,8 @@ namespace ControleFazenda.App.Controllers
                 Response.ContentType = "application/pdf";
 
                 return new FileContentResult(pdfBytes, "application/pdf");
-               
+
             }
         }
-
-        //public SelectList CarregaColaboradores(int? colaboradorId = null)
-        //{
-        //    var user = _userManager.GetUserAsync(User);
-        //    var colaboradores = _context.Colaboradores
-        //        .Where(x=> x.Fazenda == user.Result.Fazenda)
-        //                                .OrderBy(c => c.RazaoSocial)  // Ordenar pelo nome se necessário
-        //                                .ToList();
-        //    return new SelectList(colaboradores, "Id", "RazaoSocial", colaboradorId);
-        //}
     }
 }

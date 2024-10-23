@@ -40,6 +40,7 @@
                 <td>
                     <button class="btn btn-sm btn-primary modal-trigger editar" data-id="@item.Id"><i class="bi bi-pencil-square"></i></button>
                     <button class="btn btn-sm btn-danger modal-trigger excluir" data-id="@item.Id"><i class="bi bi-trash-fill"></i></button>
+                    <a class="btn btn-sm btn-outline-dark modal-trigger imprimir" target="_blank" asp-action="ImprimirDescricao" asp-route-id="@item.Id" data-id="@item.Id"><i class="bi bi-printer-fill"></i></a>
                 </td>
             </tr>
         }
@@ -63,7 +64,28 @@
                 var itemId = $(this).data('id');
                 chamarExcluir(itemId);
             });
+
+            $('.imprimir').click(function () {
+                var id = $(this).data('id');
+                var url = 'imprimir-descricao/' + id;
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function () {
+                        // Nenhum retorno necessário, a função pode ficar vazia
+                    },
+                    error: function (xhr, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: error,
+                        });
+                    }
+                });
+            });
         });
+
+        
 
         InitializeDataTable('.tabela');
     </script>
