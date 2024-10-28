@@ -1,0 +1,53 @@
+﻿@model IEnumerable<ControleFazenda.App.ViewModels.DiaristaVM>
+
+@{
+    ViewData["Title"] = "Lista de Diarista";
+}
+
+<h6>@ViewData["Title"]?.ToString()?.ToUpper()</h6>
+
+<p>
+    <a asp-action="Editar" asp-route-id="@Guid.Empty" class="w-100 btn btn-success"><i class="badge-info bi-plus-lg"></i> Novo</a>
+</p>
+<table class="table table-bordered table-striped table-hover small tabela">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Colaborador.RazaoSocial)
+            </th>
+            <th>Opções</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Colaborador.RazaoSocial)
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-primary" asp-action="Editar" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i></a>
+                    <a class="btn btn-sm btn-danger modal-trigger excluir" data-id="@item.Id"><i class="bi bi-trash-fill"></i></a>
+                    <a class="btn btn-sm btn-outline-dark modal-trigger imprimir" target="_blank" asp-action="ImprimirDiarias" asp-route-id="@item.Id" data-id="@item.Id"><i class="bi bi-printer-fill"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts
+{
+    <script>
+        function chamarExcluir(id) {
+            var url = 'excluir-diarista/' + id;
+            Excluir(id, url)
+        }
+
+        $(document).ready(function () {
+            $('.excluir').click(function () {
+                var itemId = $(this).data('id');
+                chamarExcluir(itemId);
+            });
+        });
+        InitializeDataTable('.tabela');
+    </script>
+}

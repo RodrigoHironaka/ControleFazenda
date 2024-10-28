@@ -1,0 +1,186 @@
+﻿@using ControleFazenda.Business.Entidades.Enum
+@model ControleFazenda.App.ViewModels.DiaristaVM
+
+@{
+    ViewData["Title"] = Model.Id == Guid.Empty ? "NOVO REGISTRO" : "EDITAR REGISTRO";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <h6>@ViewData["Title"]</h6>
+    </div>
+    <div class="col-md-6 text-end">
+        <h6>@Model.TotalDiarias</h6>
+    </div>
+</div>
+
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Editar" id="frm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="UsuarioCadastroId" />
+            <input type="hidden" asp-for="UsuarioAlteracaoId" />
+            <div class="row">
+                <div class="col-md-6">
+                    <label asp-for="ColaboradorId" class="control-label"></label>
+                    <select asp-for="ColaboradorId" class="form-select" asp-items="@(new SelectList(Model.Colaboradores, "Id", "RazaoSocial", Model.ColaboradorId))"></select>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Descricao" class="control-label"></label>
+                    <input asp-for="Descricao" class="form-control" />
+                    <span asp-validation-for="Descricao" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <br/>
+                    <input class="form-control" type="number" id="dias" placeholder="Quantos dias?*" required />
+                </div>
+                <div class="col-md-3">
+                    <br />
+                    <input class="form-control" id="dataInicial" type="date" placeholder="Data Inicial*" required />
+                </div>
+                <div class="col-md-3">
+                    <br />
+                    <input class="form-control" id="valor" type="number" placeholder="Valor*" required step="0.01" />
+                </div>
+                <div class="col-md-3">
+                    <br />
+                    <button class="w-100 btn btn-success" type="button" id="addRow">Adicionar Diária</button>
+                </div>
+            </div>
+            <br />
+            <table class="table table-bordered table-striped table-hover small" id="diariasTable">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Entrada Manha</th>
+                        <th>Saída Manha</th>
+                        <th>Entrada Tarde</th>
+                        <th>Saída Tarde</th>
+                        <th>Valor</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Diarias.Count(); i++)
+                    {
+                        <tr>
+                            <td>
+                                <input class="form-control" type="date" name="Diarias[@i].Data" value="@(Model.Diarias[i].Data.HasValue ? Model.Diarias[i].Data.Value.ToString("yyyy-MM-dd") : "")" required />
+                            </td>
+                            <td>
+                                <input class="form-control" type="time" name="Diarias[@i].HoraEntrada" value="@Model.Diarias[i].EntradaManha" required />
+                            </td>
+                            <td>
+                                <input class="form-control" type="time" name="Diarias[@i].HoraSaida" value="@Model.Diarias[i].SaidaManha" required />
+                            </td>
+                            <td>
+                                <input class="form-control" type="time" name="Diarias[@i].EntradaTarde" value="@Model.Diarias[i].EntradaTarde" required />
+                            </td>
+                            <td>
+                                <input class="form-control" type="time" name="Diarias[@i].SaidaTarde" value="@Model.Diarias[i].SaidaTarde" required />
+                            </td>
+                            <td>
+                                <input class="form-control" name="Diarias[@i].Valor" value="@Model.Diarias[i].Valor.ToString("N2")" required step="0.01" />
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger removeRow">Remover</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="row">
+            @if (Model.UsuarioCadastroId != Guid.Empty)
+            {
+            <div class="col-md-6">
+            <br />
+            <input asp-for="_InfoCadastro" class="form-control" readonly></input>
+            </div>
+            }
+            @if (Model.UsuarioAlteracaoId != Guid.Empty)
+            {
+            <div class="col-md-6">
+            <br />
+            <input asp-for="_InfoAlteracao" class="form-control" readonly></input>
+            </div>
+            }
+            </div>
+            <div class="form-group">
+                <br />
+                <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+                <button type="button" onclick="chamarSalvar()" class="btn btn-success">Salvar Registro</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function chamarSalvar() {
+            var id = $("#Id").val();
+            var url = '@Model.Id';
+            SalvarQuandoNaoModal('frm', url)
+        }
+        $(document).ready(function () {
+            $('#addRow').click(function () {
+
+                const dias = $('#dias').val().trim();
+                const dataInicial = $('#dataInicial').val().trim();
+                const valor = $('#valor').val().trim();
+
+                if (!dias || !dataInicial || !valor) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Campos Obrigatórios',
+                        text: 'Por favor, preencha todos os campos (Quantos Dias, Data Inicial e Valor) antes de adicionar a diária.',
+                        confirmButtonText: 'OK'
+                    });
+                }else{
+                    for (let i = 0; i < dias; i++) {
+                        const data = new Date(dataInicial);
+                        data.setDate(data.getDate() + i);
+                        const novaData = data.toISOString().split('T')[0];
+                        var newRow = `<tr>
+                                                        <td><input class="form-control" type="date" name="Diarias[${$('#diariasTable tbody tr').length}].Data" value="${novaData}" required /></td>
+                                                        <td><input class="form-control" type="time" name="Diarias[${$('#diariasTable tbody tr').length}].EntradaManha" value="07:00" required /></td>
+                                                        <td><input class="form-control" type="time" name="Diarias[${$('#diariasTable tbody tr').length}].SaidaManha" value="11:00" required /></td>
+                                                        <td><input class="form-control" type="time" name="Diarias[${$('#diariasTable tbody tr').length}].EntradaTarde" value="13:00" required /></td>
+                                                        <td><input class="form-control" type="time" name="Diarias[${$('#diariasTable tbody tr').length}].SaidaTarde" value="17:00" required /></td>
+                                                        <td><input class="form-control" name="Diarias[${$('#diariasTable tbody tr').length}].Valor" value="${valor}" required step="0.01" /></td>
+                                                 <td><button type="button" class="btn btn-danger removeRow">Remover</button></td>
+                                            </tr>`;
+                        $('#diariasTable tbody').append(newRow);
+
+                        // Atualiza os índices de todas as linhas
+                        $('#diariasTable tbody tr').each(function (index) {
+                            $(this).find('input').each(function () {
+                                var name = $(this).attr('name');
+                                if (name) {
+                                    // Atualiza o índice no atributo name para cada linha
+                                    var newName = name.replace(/Diarias\[\d+\]/, `Diarias[${index}]`);
+                                    $(this).attr('name', newName);
+                                }
+                            });
+                        });
+                    }
+                    
+                }
+
+                
+            });
+
+            $(document).on('click', '.removeRow', function () {
+                $(this).closest('tr').remove();
+            });
+        });
+    </script>
+}

@@ -27,6 +27,7 @@ namespace ControleFazenda.App.Configurations
             services.AddScoped<IValeRepositorio, ValeRepositorio>();
             services.AddScoped<IMaloteRepositorio, MaloteRepositorio>();
             services.AddScoped<IDiariaRepositorio, DiariaRepositorio>();
+            services.AddScoped<IDiaristaRepositorio, DiaristaRepositorio>();
 
 
             services.AddSingleton<IValidationAttributeAdapterProvider, MoedaValidationAttributeAdapterProvider>();
@@ -43,6 +44,7 @@ namespace ControleFazenda.App.Configurations
             services.AddScoped<IValeServico, ValeServico>();
             services.AddScoped<IMaloteServico, MaloteServico>();
             services.AddScoped<IDiariaServico, DiariaServico>();
+            services.AddScoped<IDiaristaServico, DiaristaServico>();
             return services;
         }
     }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControleFazenda.Data.Migrations
 {
     [DbContext(typeof(ContextoPrincipal))]
-    [Migration("20241022160221_ini")]
+    [Migration("20241023185201_ini")]
     partial class ini
     {
         /// <inheritdoc />
@@ -129,9 +129,6 @@ namespace ControleFazenda.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ColaboradorId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("Data")
                         .HasColumnType("datetime2");
 
@@ -141,25 +138,25 @@ namespace ControleFazenda.Data.Migrations
                     b.Property<DateTime>("DataCadastro")
                         .HasColumnType("datetime2");
 
-                    b.Property<TimeSpan>("EntradaManha")
+                    b.Property<Guid>("DiaristaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<TimeSpan?>("EntradaManha")
                         .HasColumnType("time");
 
-                    b.Property<TimeSpan>("EntradaTarde")
+                    b.Property<TimeSpan?>("EntradaTarde")
                         .HasColumnType("time");
 
                     b.Property<int>("Fazenda")
                         .HasColumnType("int");
 
-                    b.Property<int>("HorasTabalhadas")
-                        .HasColumnType("int");
+                    b.Property<string>("Identificador")
+                        .HasColumnType("varchar(100)");
 
-                    b.Property<string>("Observacao")
-                        .HasColumnType("varchar(8000)");
-
-                    b.Property<TimeSpan>("SaidaManha")
+                    b.Property<TimeSpan?>("SaidaManha")
                         .HasColumnType("time");
 
-                    b.Property<TimeSpan>("SaidaTarde")
+                    b.Property<TimeSpan?>("SaidaTarde")
                         .HasColumnType("time");
 
                     b.Property<int>("SituacaoPagamento")
@@ -180,9 +177,43 @@ namespace ControleFazenda.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ColaboradorId");
+                    b.HasIndex("DiaristaId");
 
                     b.ToTable("Diarias", (string)null);
+                });
+
+            modelBuilder.Entity("ControleFazenda.Business.Entidades.Diarista", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ColaboradorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DataAlteracao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataCadastro")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Descricao")
+                        .HasColumnType("varchar(8000)");
+
+                    b.Property<int>("Fazenda")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UsuarioAlteracaoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UsuarioCadastroId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ColaboradorId");
+
+                    b.ToTable("Diaristas", (string)null);
                 });
 
             modelBuilder.Entity("ControleFazenda.Business.Entidades.FluxoCaixa", b =>
@@ -815,8 +846,18 @@ namespace ControleFazenda.Data.Migrations
 
             modelBuilder.Entity("ControleFazenda.Business.Entidades.Diaria", b =>
                 {
-                    b.HasOne("ControleFazenda.Business.Entidades.Colaborador", "Colaborador")
+                    b.HasOne("ControleFazenda.Business.Entidades.Diarista", "Diarista")
                         .WithMany("Diarias")
+                        .HasForeignKey("DiaristaId")
+                        .IsRequired();
+
+                    b.Navigation("Diarista");
+                });
+
+            modelBuilder.Entity("ControleFazenda.Business.Entidades.Diarista", b =>
+                {
+                    b.HasOne("ControleFazenda.Business.Entidades.Colaborador", "Colaborador")
+                        .WithMany("Diaristas")
                         .HasForeignKey("ColaboradorId")
                         .IsRequired();
 
@@ -970,11 +1011,16 @@ namespace ControleFazenda.Data.Migrations
 
             modelBuilder.Entity("ControleFazenda.Business.Entidades.Colaborador", b =>
                 {
-                    b.Navigation("Diarias");
+                    b.Navigation("Diaristas");
 
                     b.Navigation("Recibos");
 
                     b.Navigation("Vales");
+                });
+
+            modelBuilder.Entity("ControleFazenda.Business.Entidades.Diarista", b =>
+                {
+                    b.Navigation("Diarias");
                 });
 
             modelBuilder.Entity("ControleFazenda.Business.Entidades.FormaPagamento", b =>

@@ -302,21 +302,12 @@ namespace ControleFazenda.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Diarias",
+                name: "Diaristas",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TipoPeriodo = table.Column<int>(type: "int", nullable: false),
-                    Data = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EntradaManha = table.Column<TimeSpan>(type: "time", nullable: false),
-                    SaidaManha = table.Column<TimeSpan>(type: "time", nullable: false),
-                    EntradaTarde = table.Column<TimeSpan>(type: "time", nullable: false),
-                    SaidaTarde = table.Column<TimeSpan>(type: "time", nullable: false),
-                    HorasTabalhadas = table.Column<int>(type: "int", nullable: false),
-                    Observacao = table.Column<string>(type: "varchar(8000)", nullable: true),
-                    Valor = table.Column<decimal>(type: "decimal(10,5)", precision: 10, scale: 5, nullable: true),
-                    SituacaoPagamento = table.Column<int>(type: "int", nullable: false),
                     ColaboradorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Descricao = table.Column<string>(type: "varchar(8000)", nullable: true),
                     DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UsuarioCadastroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -325,9 +316,9 @@ namespace ControleFazenda.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Diarias", x => x.Id);
+                    table.PrimaryKey("PK_Diaristas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Diarias_Colaboradores_ColaboradorId",
+                        name: "FK_Diaristas_Colaboradores_ColaboradorId",
                         column: x => x.ColaboradorId,
                         principalTable: "Colaboradores",
                         principalColumn: "Id");
@@ -449,6 +440,37 @@ namespace ControleFazenda.Data.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Diarias",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TipoPeriodo = table.Column<int>(type: "int", nullable: false),
+                    Data = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EntradaManha = table.Column<TimeSpan>(type: "time", nullable: true),
+                    SaidaManha = table.Column<TimeSpan>(type: "time", nullable: true),
+                    EntradaTarde = table.Column<TimeSpan>(type: "time", nullable: true),
+                    SaidaTarde = table.Column<TimeSpan>(type: "time", nullable: true),
+                    Valor = table.Column<decimal>(type: "decimal(10,5)", precision: 10, scale: 5, nullable: true),
+                    Identificador = table.Column<string>(type: "varchar(100)", nullable: true),
+                    SituacaoPagamento = table.Column<int>(type: "int", nullable: false),
+                    DiaristaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataAlteracao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UsuarioCadastroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UsuarioAlteracaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Fazenda = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Diarias", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Diarias_Diaristas_DiaristaId",
+                        column: x => x.DiaristaId,
+                        principalTable: "Diaristas",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -489,8 +511,13 @@ namespace ControleFazenda.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Diarias_ColaboradorId",
+                name: "IX_Diarias_DiaristaId",
                 table: "Diarias",
+                column: "DiaristaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Diaristas_ColaboradorId",
+                table: "Diaristas",
                 column: "ColaboradorId");
 
             migrationBuilder.CreateIndex(
@@ -563,6 +590,9 @@ namespace ControleFazenda.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Diaristas");
 
             migrationBuilder.DropTable(
                 name: "Caixas");

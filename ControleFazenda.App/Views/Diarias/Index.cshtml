@@ -21,9 +21,7 @@
 <table class="table table-bordered table-striped table-hover small tabela">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Colaborador)
-            </th>
+            
             <th>
                 @Html.DisplayNameFor(model => model.Data)
             </th>
@@ -43,9 +41,7 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Colaborador.RazaoSocial)
-                </td>
+               
                 <td>
                     @Html.Raw(item.Data.Value.ToLongDateString())
                 </td>

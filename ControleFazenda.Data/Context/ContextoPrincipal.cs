@@ -22,6 +22,7 @@ namespace ControleFazenda.Data.Context
         public DbSet<Vale> Vales { get; set; }
         public DbSet<Malote> Malotes { get; set; }
         public DbSet<Diaria> Diarias { get; set; }
+        public DbSet<Diarista> Diaristas { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -11,14 +11,12 @@ namespace ControleFazenda.Business.Entidades
         public TimeSpan? SaidaManha { get; set; }
         public TimeSpan? EntradaTarde { get; set; }
         public TimeSpan? SaidaTarde { get; set; }
-        public Int32 HorasTabalhadas { get; set; }
-        public string? Observacao { get; set; }
         public decimal? Valor { get; set; }
         public string? Identificador { get; set; }
         public SituacaoPagamento SituacaoPagamento { get; set; }
 
-        public Guid ColaboradorId { get; set; }
-        public Colaborador? Colaborador { get; set; }
+        public Guid DiaristaId { get; set; }
+        public Diarista? Diarista { get; set; }
 
 
     }

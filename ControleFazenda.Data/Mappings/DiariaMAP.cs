@@ -23,13 +23,11 @@ namespace ControleFazenda.Data.Mappings
             builder.Property(x => x.SaidaManha);
             builder.Property(x => x.EntradaTarde);
             builder.Property(x => x.SaidaTarde);
-            builder.Property(x => x.HorasTabalhadas);
-            builder.Property(x => x.Observacao).HasColumnType("varchar(8000)");
             builder.Property(x => x.Identificador).HasColumnType("varchar(100)");
             builder.Property(x => x.Valor).HasPrecision(10, 5);
             builder.Property(x => x.TipoPeriodo).HasConversion<Int32>();
             builder.Property(x => x.Fazenda).HasConversion<Int32>();
-            builder.HasOne(x => x.Colaborador).WithMany(x => x.Diarias).HasForeignKey(x => x.ColaboradorId);
+            builder.HasOne(x => x.Diarista).WithMany(x => x.Diarias).HasForeignKey(x => x.DiaristaId); 
             builder.ToTable("Diarias");
         }
     }

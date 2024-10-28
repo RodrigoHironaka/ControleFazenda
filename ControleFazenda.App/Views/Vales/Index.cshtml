@@ -89,24 +89,24 @@
                 chamarExcluir(itemId);
             });
 
-            $('.imprimir').click(function () {
-                var id = $(this).data('id');
-                var url = 'imprimir-vale/' + id;
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    success: function () {
-                        // Nenhum retorno necessário, a função pode ficar vazia
-                    },
-                    error: function (xhr, status, error) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: error,
-                        });
-                    }
-                });
-            });
+            // $('.imprimir').click(function () {
+            //     var id = $(this).data('id');
+            //     var url = 'imprimir-vale/' + id;
+            //     $.ajax({
+            //         url: url,
+            //         type: 'GET',
+            //         success: function () {
+            //             // Nenhum retorno necessário, a função pode ficar vazia
+            //         },
+            //         error: function (xhr, status, error) {
+            //             Swal.fire({
+            //                 icon: 'error',
+            //                 title: 'Oops...',
+            //                 text: error,
+            //             });
+            //         }
+            //     });
+            // });
         });
 
         

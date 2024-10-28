@@ -16,9 +16,6 @@ namespace ControleFazenda.Business.Entidades.Validacoes
 
             RuleFor(x => x.Data)
             .NotNull().WithMessage("O campo {PropertyName} precisa ser fornecido");
-
-            RuleFor(x => x.ColaboradorId)
-            .NotNull().WithMessage("O campo {PropertyName} é obrigatório!");
         }
     }
 }

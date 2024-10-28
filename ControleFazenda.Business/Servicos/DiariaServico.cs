@@ -52,15 +52,5 @@ namespace ControleFazenda.Business.Servicos
         {
             _diariaRepositorio?.Dispose();
         }
-
-        public async Task<Diaria> ObterPorIdComColaborador(Guid Id)
-        {
-            return await _diariaRepositorio.ObterPorIdComColaborador(Id);
-        }
-
-        public async Task<IEnumerable<Diaria>> ObterTodosComColaborador()
-        {
-            return await _diariaRepositorio.ObterTodosComColaborador();
-        }
     }
 }
